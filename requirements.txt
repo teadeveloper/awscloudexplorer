@@ -1,0 +1,4 @@
+npyscreen
+PyYAML
+boto3
+pandas
