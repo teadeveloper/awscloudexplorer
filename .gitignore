@@ -2,11 +2,14 @@
 # Created by https://www.toptal.com/developers/gitignore/api/python
 # Edit at https://www.toptal.com/developers/gitignore?templates=python
 
-#my tests
+#customfiles and folders
 examples/
 terraform/
 .idea/
+
 temporal.txt
+test_ec.py
+type_filename.ext
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
