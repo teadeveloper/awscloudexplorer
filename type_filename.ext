@@ -1,9 +1,0 @@
-             0                           1             2
-0  sg-cc650a64               default group  000000000000
-1  sg-d00085f4  default VPC security group  000000000000
-2  sg-aba80e7e  default VPC security group  000000000000
-3  sg-28b8097c  default VPC security group  000000000000
-4  sg-9ba69d5f  default VPC security group  000000000000
-5  sg-c11e2545  default VPC security group  000000000000
-6  sg-7aa7b51f  default VPC security group  000000000000
-7  sg-72d39c65  default VPC security group  000000000000
