@@ -6,6 +6,7 @@
 examples/
 terraform/
 .idea/
+temporal.txt
 
 ### Python ###
 # Byte-compiled / optimized / DLL files

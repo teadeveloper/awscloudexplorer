@@ -26,7 +26,24 @@ ec2_filters:
   - [{'Name': 'instance-state-name', 'Values': ['running']}]
   - [{'Name': 'instance-state-name', 'Values': ['stopped']}]
   - [{'Name': 'instance-state-name', 'Values': ['terminated']}]
-  - [{'Name': 'tag:Name','Values': [ 'Terra*' ] } ]
+
+security_groups_filters:
+  - [] # List all]
+  - [{"Name" :"tag:tag1", "Values":["val*"] }]
+
+vpc_filters:
+  - [] # List all]
+  - [{"Name" :"tag:tag1", "Values":["val*"] }]
+
+acl_network_filters:
+  - [] # List all]
+  - [{"Name" :"tag:tag1", "Values":["val*"] }]
+
+subnets_filters:
+  - [] # List all]
+  - [{"Name" :"tag:tag1", "Values":["val*"] }]
+  - [{"Name" :"tag:tag1", "Values":["example*"] }]
+
 
 tw_region_relx: 2
 tw_region_rely: 2
@@ -48,8 +65,9 @@ tw_information_rely: 23
 tw_information_height: 20
 tw_information_width: 140
 
-aws_region: None
-aws_end_end_point: "http://localhost:4566"
+aws_region: "us-east-1"
+#for localstack "http://localhost:4566"
+aws_end_end_point:
 AWS_ACCESS_KEY_ID: "mock_access_key"
 AWS_SECRET_ACCESS_KEY: mock_secret_key"
 AWS_DEFAULT_REGION: us-east-1"

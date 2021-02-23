@@ -20,6 +20,10 @@ class AwsNetwork:
 
         """
 
+        self.vpc_filters = []
+        self.subnets_filters = []
+        self.acl_network_filters = []
+
         self.aws_end_point = aws_end_point
         self.aws_region = aws_region
         self.ec2client = boto3.client(
@@ -31,7 +35,7 @@ class AwsNetwork:
         :return: a list of lists with every VPC config.
         """
         vpcs_list = []
-        vpcs = self.ec2client.describe_vpcs()["Vpcs"]
+        vpcs = self.ec2client.describe_vpcs(Filters=self.vpc_filters)["Vpcs"]
 
         for vpc in vpcs:
             vpc_data = [vpc["VpcId"], vpc["CidrBlock"], vpc["State"], vpc["DhcpOptionsId"], vpc["InstanceTenancy"]]
@@ -46,7 +50,7 @@ class AwsNetwork:
         """
 
         subnets_list = []
-        subnets = self.ec2client.describe_subnets()["Subnets"]
+        subnets = self.ec2client.describe_subnets(Filters=self.subnets_filters)["Subnets"]
 
         for subnet in subnets:
             subnet_data = [subnet["SubnetId"],subnet["CidrBlock"],subnet["AvailableIpAddressCount"],subnet["VpcId"],
@@ -61,7 +65,7 @@ class AwsNetwork:
         :return: a list of lists with every VPC config.
         """
         acl_network_list = []
-        acls = self.ec2client.describe_network_acls()["NetworkAcls"]
+        acls = self.ec2client.describe_network_acls(Filters=self.acl_network_filters)["NetworkAcls"]
 
         for acl in acls:
             acl_data = [acl["NetworkAclId"],acl["VpcId"]]

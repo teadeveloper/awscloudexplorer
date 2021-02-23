@@ -8,6 +8,7 @@ class AwsS3:
 
     def __init__(self, aws_end_point, aws_region):
 
+        self.bucket_filters = []
         self.aws_end_point = aws_end_point
         self.aws_region = aws_region
         self.s3_resource = boto3.resource(
@@ -28,7 +29,7 @@ class AwsS3:
         """
         buckets_list = []
 
-        for bucket in self.s3_client.list_buckets()['Buckets']:
+        for bucket in self.s3_client.list_buckets(Filters=self.bucket_filters)['Buckets']:
             bucket_data = [bucket["Name"], bucket["CreationDate"], self.s3_client.get_bucket_location(
                 Bucket=bucket['Name'])['LocationConstraint']]
             buckets_list.append(bucket_data)
