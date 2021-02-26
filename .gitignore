@@ -8,7 +8,7 @@ terraform/
 .idea/
 
 temporal.txt
-test_ec.py
+test.py
 type_filename.ext
 
 ### Python ###

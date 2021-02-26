@@ -7,7 +7,8 @@ import json
 import yaml
 
 aws_region = None
-aws_end_end_point =  "http://localhost:4566"
+aws_end_end_point = None
+# "http://localhost:4566"
 
 instancias = AwsEc2(aws_end_end_point, aws_region)
 s3 = AwsS3(aws_end_end_point, aws_region)
@@ -20,7 +21,7 @@ security = AwsSecurity(aws_end_end_point, aws_region)
 #results = ec2.get_method_results("i-0cf04fd9d3a5836d3", "describe_instance_status")
 
 #ec2.ec2_export_to("string", "prueba.txt")
-results = security.get_security_groups_yml_properties()
+results = network.get_network_interfaces()
 print(results)
 
 #print (yaml.dump(results))

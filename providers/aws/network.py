@@ -23,6 +23,7 @@ class AwsNetwork:
         self.vpc_filters = []
         self.subnets_filters = []
         self.acl_network_filters = []
+        self.network_interfaces_filters = []
 
         self.aws_end_point = aws_end_point
         self.aws_region = aws_region
@@ -73,6 +74,22 @@ class AwsNetwork:
 
         return acl_network_list
 
+    def get_network_interfaces(self):
+        """
+        Get all Network interfaces
+        :return: a list of lists with every Network interface config.
+        """
+        network_interfaces_list = []
+        response_network_interfaces_list = self.ec2client.describe_network_interfaces(Filters=self.network_interfaces_filters)["NetworkInterfaces"]
+
+        for interface in response_network_interfaces_list:
+            interface_data = [interface["NetworkInterfaceId"],interface["Description"],interface["AvailabilityZone"],interface["MacAddress"],interface["OwnerId"]]
+            network_interfaces_list.append(interface_data)
+
+
+        return network_interfaces_list
+
+
     def get_subnet_yml_properties(self, subnet_id):
 
         """
@@ -100,13 +117,22 @@ class AwsNetwork:
     def get_acl_yml_network_properties(self, acl_id):
 
         """
-
         :param acl_id: The ID of the ACL.
         :return: a yml with the ACL configuration
         """
         acl_id_data = self.ec2client.describe_network_acls(NetworkAclIds=[acl_id])
         results_acl = yaml.dump(acl_id_data).splitlines()
         return results_acl
+
+    def get_network_interface_properties(self, interface_id):
+        """
+
+        :param interface_id: The ID of the network interface
+        :return: a yml with the network interface configuration
+        """
+        interface_data = self.ec2client.describe_network_interfaces(NetworkInterfaceIds=[interface_id])
+        results_interface = yaml.dump(interface_data).splitlines()
+        return results_interface
 
     def export_vpc_yaml(self, vpc_id):
         """

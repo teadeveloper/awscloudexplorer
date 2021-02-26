@@ -134,7 +134,7 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
                 'color': "WARNING",
                 'widgets_inherit_color': True,
                 'name': "",
-                'values': ["EC2", "Buckets", "VPC", "Subnets", "ACLs Network", "Security Groups", "EFS", "IAM"]})
+                'values': ["EC2", "Buckets", "VPC", "Subnets", "ACLs Network", "Security Groups", "Network interfaces", "IAM"]})
 
         self.tw_aws_grid = self.add(
             BoxAwsTableWidgetBox,
@@ -170,8 +170,6 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
         # Add actions to GRID
         self.tw_aws_grid.add_handlers(
             {curses.ascii.NL: self.act_on_enter_in_grid_widget})
-        self.tw_aws_grid.add_handlers(
-            {"^A": self.from_custom_actions_for_grid})
         self.tw_aws_grid.add_handlers({"^E": self.export_selected_row_grid})
         self.tw_aws_grid.add_handlers({"^F": self.form_custom_filter})
         self.tw_aws_grid.add_handlers({"^O": self.test})
@@ -234,6 +232,14 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
             self.tw_aws_grid.values = self.securitygroups_list
             self.tw_aws_grid.update(clear=True)
             self.tw_aws_grid.display()
+        elif act_on_this == "Network interfaces":
+            self.tw_aws_service.value = 6
+            self.tw_aws_grid.name = act_on_this
+            self.network_interfaces_list = self.network.get_network_interfaces()
+            self.tw_aws_grid.values = self.network_interfaces_list
+            self.tw_aws_grid.update(clear=True)
+            self.tw_aws_grid.display()
+
 
     def ec2_export_to(self):
 
@@ -364,6 +370,15 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
             self.tw_information.values = security_group_result
             self.tw_information.update()
 
+        elif self.service_selected == "Network interfaces":
+            npyscreen.notify("Reading Information for Network interfaces",
+                             title="Information")
+            # get the value in row selected
+            object_id = self.tw_aws_grid.entry_widget.selected_row()
+            data_result = self.network.get_network_interface_properties(object_id[0])
+            self.tw_information.values = data_result
+            self.tw_information.update()
+
     def form_export_to(self):
         """Show the form to select the export_format and the file name
 
@@ -410,6 +425,8 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
             values_filter = configuration["vpc_filters"]
         elif self.service_selected == "Subnets":
             values_filter = configuration["subnets_filters"]
+        elif self.service_selected == "ACLs Network":
+            values_filter = configuration["acl_network_filters"]
         else:
             values_filter = None
             label_name = "Feature not supported yet for " + self.service_selected
@@ -453,63 +470,19 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
                 data = self.network.get_subnets()
                 self.tw_aws_grid.values = data
                 self.tw_aws_grid.update(clear=True)
+            elif self.service_selected == "ACLs Network":
+                value_selected = custom_filter.value[0]
+                self.network.acl_network_filters = custom_filter.values[value_selected]
+                data = self.network.get_acl_network()
+                self.tw_aws_grid.values = data
+                self.tw_aws_grid.update(clear=True)
+
+
             else:
                 pass
 
         filter_form.on_ok = partial(new_on_ok_action, filter_form)
         filter_form.edit()
-
-    def from_custom_actions_for_grid(self, info):
-        """
-        Show a form to choose the boto3 custom method to be called when the user press enter in the grid widget.
-
-        Depends on the value of the variable  service_selected to select the actions to do.
-
-        The methods name are saved in the file forms/aws_form.yml, it changes the variable "_info_methods"
-        for the service selected.
-
-        :param info: NPYSCREEN variable
-        :return: list_method_selected
-        """
-
-        self.tw_information.values = None
-        self.tw_information.update()
-
-        methods_list = None
-
-        action_form = npyscreen.ActionPopup(name="Actions to")
-
-        if self.service_selected == "Buckets":
-            methods_list = self.configuration["s3_info_methods"]
-        elif self.service_selected == "EC2":
-            methods_list = self.configuration["ec2_info_methods"]
-
-        get_info = action_form.add(
-            npyscreen.TitleSelectOne,
-            value=[
-                0,
-            ],
-            name="Select what to show in information box",
-            values=methods_list,
-            scroll_exit=True)
-
-        # Override a method at instance level
-        def new_on_ok_action(info):
-
-            if self.service_selected == "Buckets":
-                self.s3_what_to_show_information_box = get_info.get_selected_objects()[
-                    0]
-            elif self.service_selected == "EC2":
-                self.ec2_what_to_show_in_formation_box = get_info.get_selected_objects()[
-                    0]
-
-        action_form.on_ok = partial(new_on_ok_action, action_form)
-
-        action_form.edit()
-
-        list_method_selected = get_info.get_selected_objects()[0]
-
-        return list_method_selected
 
     def export_selected_row_grid(self, info):
         """
