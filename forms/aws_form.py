@@ -32,39 +32,30 @@ from providers.aws.network import AwsNetwork
 from providers.aws.security import AwsSecurity
 from functools import partial
 
-
 class AwsRegionWidget(npyscreen.MultiLineAction):
     pass
 
-
 class AwsTableWidget(npyscreen.SimpleGrid):
     pass
-
 
 class AwsServiceWidget(npyscreen.MultiLineAction):
     def actionHighlighted(self, act_on_this, keypress):
         self.parent.parentApp.getForm('MAIN').act_service_selected_action(act_on_this)
 
-
 class AwsInformationWidget(npyscreen.MultiLine):
     pass
-
 
 class BoxAwsRegionWidgetBox(npyscreen.BoxTitle):
     _contained_widget = AwsRegionWidget
 
-
 class BoxAwsTableWidgetBox(npyscreen.BoxTitle):
     _contained_widget = AwsTableWidget
-
 
 class BoxAwsServiceWidget(npyscreen.BoxTitle):
     _contained_widget = AwsServiceWidget
 
-
 class BoxAwsDetailWidget(npyscreen.BoxTitle):
     _contained_widget = AwsInformationWidget
-
 
 class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
     with open("forms/aws_form.yml") as f:
@@ -83,8 +74,7 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
 
     def create(self):  # override the Form’s create() method, which is called whenever a Form is created
 
-        npyscreen.setTheme(npyscreen.Themes.ColorfulTheme)
-
+        npyscreen.setTheme(npyscreen.Themes.ElegantTheme)
         self.aws_ec2_menu = self.add_menu(name="Instances EC2")
         self.aws_s3_menu = self.add_menu(name="S3 Buckets")
         self.aws_network_menu = self.add_menu(name="Network")
@@ -119,8 +109,8 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
             height=self.configuration["tw_region_height"],
             scroll_exit=True,
             contained_widget_arguments={
-                'color': "WARNING",
-                'widgets_inherit_color': True,
+                #'color': "WARNING",
+                #'widgets_inherit_color': True,
                 'edit': False,
                 'values': [os.getenv('AWS_DEFAULT_REGION')], }, )
 
@@ -132,8 +122,8 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
             width=self.configuration["tw_service_width"],
             scroll_exit=True,
             contained_widget_arguments={
-                'color': "WARNING",
-                'widgets_inherit_color': True,
+                #'color': "WARNING",
+                #'widgets_inherit_color': True,
                 'name': "",
                 'values': ["EC2", "Buckets", "VPC", "Subnets", "ACLs Network", "Security Groups", "Network interfaces", "IAM"]})
 
@@ -145,7 +135,7 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
             width=self.configuration["tw_grid_width"],
             name="Select Service in the left menu",
             contained_widget_arguments={
-                'color': "DEFAULT",
+                #'color': "DEFAULT",
                 # 'widgets_inherit_color': True,
                 'select_whole_line': "True",
                 'column_width': 20,
@@ -161,8 +151,8 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
 
             scroll_exit=True,
             contained_widget_arguments={
-                'color': "WARNING",
-                'widgets_inherit_color': True,
+                #'color': "WARNING",
+                #'widgets_inherit_color': True,
             })
 
         # DEFAULT VALUES STARTING THE FORM
@@ -173,14 +163,9 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
             {curses.ascii.NL: self.act_on_enter_in_grid_widget})
         self.tw_aws_grid.add_handlers({"^E": self.export_selected_row_grid})
         self.tw_aws_grid.add_handlers({"^F": self.form_custom_filter})
-        self.tw_aws_grid.add_handlers({"^O": self.test})
 
         self.tw_aws_service.value = 0
 
-    def test(self, info):
-        bucket_id = self.tw_aws_grid.entry_widget.selected_row()
-        text_to_show = self.s3.get_number_of_objets_size(bucket_id[0])
-        npyscreen.notify_wait(message=text_to_show)
 
     def act_service_selected_action(self, act_on_this):
 
