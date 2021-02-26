@@ -146,6 +146,18 @@ class AwsNetwork:
         yaml.safe_dump(vpc_data, file)
         file.close()
 
+    def export_network_interface_yaml(self, interface_id):
+        """
+        Save the Network interface data information to a file
+
+        :param vpc_id: id of the network interface
+        :return:
+        """
+        interface_data = self.ec2client.describe_network_interfaces(NetworkInterfaceIds=[interface_id])
+        file = open(interface_id + ".yml", "w")
+        yaml.safe_dump(interface_data, file)
+        file.close()
+
     def export_subnets_yaml(self, subnet_id):
         """
         Save the Subnets information to a file

@@ -530,3 +530,11 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
                              title="Information")
             time.sleep(2)
             self.Security.export_security_group_yaml(security_group_id[0])
+
+        elif self.service_selected == "Network interfaces":
+            object_id = self.tw_aws_grid.entry_widget.selected_row()
+            npyscreen.notify("Exporting data to " + object_id[0] + ".yml",
+                             title="Information")
+            time.sleep(2)
+            self.network.export_network_interface_yaml(object_id[0])
+
