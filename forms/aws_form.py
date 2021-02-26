@@ -450,36 +450,31 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
                 value_selected = custom_filter.value[0]
                 self.ec2.ec2_filter = custom_filter.values[value_selected]
                 data = self.ec2.get_instances()
-                self.tw_aws_grid.values = data
-                self.tw_aws_grid.update(clear=True)
+
             elif self.service_selected == "Security Groups":
                 value_selected = custom_filter.value[0]
                 self.Security.security_groups_filters = custom_filter.values[value_selected]
                 data = self.Security.get_security_groups()
-                self.tw_aws_grid.values = data
-                self.tw_aws_grid.update(clear=True)
+
             elif self.service_selected == "VPC":
                 value_selected = custom_filter.value[0]
                 self.network.vpc_filters = custom_filter.values[value_selected]
                 data = self.network.get_vpcs()
-                self.tw_aws_grid.values = data
-                self.tw_aws_grid.update(clear=True)
+
             elif self.service_selected == "Subnets":
                 value_selected = custom_filter.value[0]
                 self.network.subnets_filters = custom_filter.values[value_selected]
                 data = self.network.get_subnets()
-                self.tw_aws_grid.values = data
-                self.tw_aws_grid.update(clear=True)
+
             elif self.service_selected == "ACLs Network":
                 value_selected = custom_filter.value[0]
                 self.network.acl_network_filters = custom_filter.values[value_selected]
                 data = self.network.get_acl_network()
-                self.tw_aws_grid.values = data
-                self.tw_aws_grid.update(clear=True)
-
-
             else:
                 pass
+
+            self.tw_aws_grid.values = data
+            self.tw_aws_grid.update(clear=True)
 
         filter_form.on_ok = partial(new_on_ok_action, filter_form)
         filter_form.edit()
