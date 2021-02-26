@@ -89,7 +89,6 @@ class AwsNetwork:
 
         return network_interfaces_list
 
-
     def get_subnet_yml_properties(self, subnet_id):
 
         """
@@ -266,19 +265,19 @@ class AwsNetwork:
 
          """
 
-        aws_subnet_response = self.get_acl_network()
+        aws_acl_response = self.get_acl_network()
 
         acls = []
 
-        for subnet in aws_subnet_response:
-            acls.append(subnet)
+        for acl in aws_acl_response:
+            acls.append(acl)
 
         df_acls = pd.DataFrame(acls)
 
         if export_format == 0:
             excel_writer = pd.ExcelWriter(file_name, engine='xlsxwriter')
-            df_subnets.to_excel(
-                excel_writer, sheet_name='Subnets', index=False)
+            df_acls.to_excel(
+                excel_writer, sheet_name='acls', index=False)
             excel_writer.save()
         elif export_format == 1:
             df_acls.to_csv(file_name)
@@ -288,3 +287,38 @@ class AwsNetwork:
             df_acls.to_markdown(file_name)
         elif export_format == 4:
             df_acls.to_html(file_name)
+
+    def export_network_interfaces_to(self, export_format, file_name):
+        """Convert all the network interfaces in a AWS  to a excel, csv, readme, or html
+
+         * export_format: html,string,csv, excel or markdown
+         * file_name: file name to save the results.
+
+         Returns
+         -------
+         N/A
+
+         """
+
+        network_interfaces = self.get_network_interfaces()
+
+        network_interfaces_list = []
+
+        for interface in network_interfaces:
+            network_interfaces_list.append(interface)
+
+        df_interfaces = pd.DataFrame(network_interfaces_list)
+
+        if export_format == 0:
+            excel_writer = pd.ExcelWriter(file_name, engine='xlsxwriter')
+            df_subnets.to_excel(
+                excel_writer, sheet_name='Subnets', index=False)
+            excel_writer.save()
+        elif export_format == 1:
+            df_interfaces.to_csv(file_name)
+        elif export_format == 2:
+            df_interfaces.to_string(file_name)
+        elif export_format == 3:
+            df_interfaces.to_markdown(file_name)
+        elif export_format == 4:
+            df_interfaces.to_html(file_name)

@@ -102,6 +102,7 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
         self.aws_network_menu.addItemsFromList([
             ("Export VPCs", self.vpc_export_to),
             ("Export Subnets", self.subnets_export_to),
+            ("Export Network interfaces", self.network_interfaces_export_to),
             ("Export ACLS", self.acls_export_to),
         ])
 
@@ -264,6 +265,13 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
 
         user_options_chosen = self.form_export_to()
         self.network.export_vpc_to(user_options_chosen[0], user_options_chosen[1])
+
+    def network_interfaces_export_to(self):
+        def info_message():
+            npyscreen.notify_wait("Working...", form_color='GOOD')
+
+        user_options_chosen = self.form_export_to()
+        self.network.export_network_interfaces_to(user_options_chosen[0], user_options_chosen[1])
 
     def security_group_export_to(self):
 
@@ -446,28 +454,21 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
         # Override a NPYSCREEN method on_ok at instance level
         def new_on_ok_action(info):
 
+            value_selected = custom_filter.value[0]
+
             if self.service_selected == "EC2":
-                value_selected = custom_filter.value[0]
                 self.ec2.ec2_filter = custom_filter.values[value_selected]
                 data = self.ec2.get_instances()
-
             elif self.service_selected == "Security Groups":
-                value_selected = custom_filter.value[0]
                 self.Security.security_groups_filters = custom_filter.values[value_selected]
                 data = self.Security.get_security_groups()
-
             elif self.service_selected == "VPC":
-                value_selected = custom_filter.value[0]
                 self.network.vpc_filters = custom_filter.values[value_selected]
                 data = self.network.get_vpcs()
-
             elif self.service_selected == "Subnets":
-                value_selected = custom_filter.value[0]
                 self.network.subnets_filters = custom_filter.values[value_selected]
                 data = self.network.get_subnets()
-
             elif self.service_selected == "ACLs Network":
-                value_selected = custom_filter.value[0]
                 self.network.acl_network_filters = custom_filter.values[value_selected]
                 data = self.network.get_acl_network()
             else:
@@ -488,53 +489,20 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
         :return:
         """
 
+        object_id = self.tw_aws_grid.entry_widget.selected_row()
+        npyscreen.notify("Exporting data to " + object_id[0] + ".yml", title="Information")
+
         if self.service_selected == "EC2":
-            ec2id = self.tw_aws_grid.entry_widget.selected_row()
-            npyscreen.notify("Exporting data to " + ec2id[1] + ".yml",
-                             title="Information")
-            time.sleep(2)
-
-            # get the value in row selected
-            self.ec2.export_instance_yaml(ec2id[1])
-
+            self.ec2.export_instance_yaml(object_id[1])
         elif self.service_selected == "Buckets":
-            s3_id = self.tw_aws_grid.entry_widget.selected_row()
-            npyscreen.notify("Exporting data to " + s3_id[0] + ".yml",
-                             title="Information")
-            time.sleep(2)
-            self.s3.export_s3_yaml(s3_id[0])
-
+            self.s3.export_s3_yaml(object_id[0])
         elif self.service_selected == "VPC":
-            vpc_id = self.tw_aws_grid.entry_widget.selected_row()
-            npyscreen.notify("Exporting data to " + vpc_id[0] + ".yml",
-                             title="Information")
-            time.sleep(2)
-            self.network.export_vpc_yaml(vpc_id[0])
-
+            self.network.export_vpc_yaml(object_id[0])
         elif self.service_selected == "Subnets":
-            subnet_id = self.tw_aws_grid.entry_widget.selected_row()
-            npyscreen.notify("Exporting data to " + subnet_id[0] + ".yml",
-                             title="Information")
-            time.sleep(2)
-            self.network.export_subnets_yaml(subnet_id[0])
-
+            self.network.export_subnets_yaml(object_id[0])
         elif self.service_selected == "ACLs Network":
-            acl_id = self.tw_aws_grid.entry_widget.selected_row()
-            npyscreen.notify("Exporting data to " + acl_id[0] + ".yml",
-                             title="Information")
-            time.sleep(2)
-            self.network.export_acls_yaml(acl_id[0])
+            self.network.export_acls_yaml(object_id[0])
         elif self.service_selected == "Security Groups":
-            security_group_id = self.tw_aws_grid.entry_widget.selected_row()
-            npyscreen.notify("Exporting data to " + security_group_id[0] + ".yml",
-                             title="Information")
-            time.sleep(2)
-            self.Security.export_security_group_yaml(security_group_id[0])
-
+            self.Security.export_security_group_yaml(object_id[0])
         elif self.service_selected == "Network interfaces":
-            object_id = self.tw_aws_grid.entry_widget.selected_row()
-            npyscreen.notify("Exporting data to " + object_id[0] + ".yml",
-                             title="Information")
-            time.sleep(2)
             self.network.export_network_interface_yaml(object_id[0])
-
