@@ -1,5 +1,5 @@
 <p align="center">
-<img src="images/cloudexplorer.png" width="500" height="250">
+<img src="images/logo.png" width="375" height="125">
 </p> 
 
 
