@@ -23,6 +23,7 @@ class AwsEc2:
         self.aws_end_point = aws_end_point
         self.ec2_filter = [{'Name': 'instance-state-name',
                             'Values': ['running', 'stopped', 'terminated']}]
+        self.ebs_filters = []
         self.aws_region = aws_region
         self.ec2resource = boto3.resource(
             'ec2', endpoint_url=self.aws_end_point, region_name=self.aws_region)
@@ -58,6 +59,32 @@ class AwsEc2:
             ec2_instances.append(ec2_instance)
 
         return ec2_instances
+
+    def get_ebs(self):
+        """
+        Get a list of all EBS volumes in AWS account
+
+        :return: List of lists
+        """
+        response_ebs_list = self.ec2client.describe_volumes(Filters=self.ebs_filters)["Volumes"]
+        ebs_volumes = []
+
+        for ebs in response_ebs_list:
+            ebs_data = [ebs["VolumeId"], ebs["Size"], ebs["VolumeType"], ebs["Iops"], ebs["Encrypted"]]
+            ebs_volumes.append((ebs_data))
+        return ebs_volumes
+
+    def get_ebs_yml_properties(self, ebs_id):
+        """
+        Get the EBS configuration.
+
+        :param ebs_id: AWS EBS volume id
+        :return: Configuration in YAML export_format.
+        """
+        ebs_data = self.ec2client.describe_volumes(VolumeIds=[ebs_id])
+
+        yml_data_result = yaml.dump(ebs_data)
+        return yml_data_result.splitlines()
 
     def get_ec2_yml_properties(self, ec2_id):
         """
@@ -158,7 +185,6 @@ class AwsEc2:
         elif export_format == 4:
             df_ec2_instances.to_html(file_name)
 
-
     def all_keys_export_to(self, export_format, file_name):
         """
        Convert and save to a file all EC2 instances to a Excel, CSV, Markdown, String or HTML
@@ -208,3 +234,50 @@ class AwsEc2:
         file = open(ec2_id + ".yml", "w")
         yaml.safe_dump(ec2_data["Reservations"], file)
         file.close()
+
+    def export_ebs_yml(self, ebs_id):
+        """
+        Get the EBS configuration.
+
+        :param ebs_id: AWS EBS volume id
+        """
+        ebs_data = self.ec2client.describe_volumes(VolumeIds=[ebs_id])
+        file = open(ebs_id + ".yml", "w")
+        yaml.safe_dump(ebs_data, file)
+        file.close()
+
+    def export_ebs_to(self, export_format, file_name):
+
+        """Convert all EBS  in a AWS  to a excel, csv, readme, or html
+
+                * export_format: html,string,csv, excel or markdown
+                * file_name: file name to save the results.
+
+                Returns
+                -------
+                N/A
+
+                """
+
+        aws_ebs_response = self.get_ebs()
+
+        ebs_volumes = []
+
+        for ebs in aws_ebs_response:
+            ebs_volumes.append(ebs)
+
+        df_ebs = pd.DataFrame(ebs_volumes)
+
+        if export_format == 0:
+            excel_writer = pd.ExcelWriter(file_name, engine='xlsxwriter')
+            df_ebs.to_excel(
+                excel_writer, sheet_name='VPCs', index=False)
+            excel_writer.save()
+        elif export_format == 1:
+            df_ebs.to_csv(file_name)
+        elif export_format == 2:
+            df_ebs.to_string(file_name)
+        elif export_format == 3:
+            df_ebs.to_markdown(file_name)
+        elif export_format == 4:
+            df_ebs.to_html(file_name)

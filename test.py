@@ -21,7 +21,7 @@ security = AwsSecurity(aws_end_end_point, aws_region)
 #results = ec2.get_method_results("i-0cf04fd9d3a5836d3", "describe_instance_status")
 
 #ec2.ec2_export_to("string", "prueba.txt")
-results = network.get_network_interfaces()
+results = ec2.get_ebs_yml_properties("vol-05f894c7f5b9469ed")
 print(results)
 
 #print (yaml.dump(results))

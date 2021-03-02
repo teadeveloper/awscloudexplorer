@@ -126,8 +126,8 @@ class AwsNetwork:
     def get_network_interface_properties(self, interface_id):
         """
 
-        :param interface_id: The ID of the network interface
-        :return: a yml with the network interface configuration
+        :param interface_id: The ID of the Network interface
+        :return: a yml with the Network interface configuration
         """
         interface_data = self.ec2client.describe_network_interfaces(NetworkInterfaceIds=[interface_id])
         results_interface = yaml.dump(interface_data).splitlines()
@@ -149,7 +149,7 @@ class AwsNetwork:
         """
         Save the Network interface data information to a file
 
-        :param vpc_id: id of the network interface
+        :param vpc_id: id of the Network interface
         :return:
         """
         interface_data = self.ec2client.describe_network_interfaces(NetworkInterfaceIds=[interface_id])
@@ -289,7 +289,7 @@ class AwsNetwork:
             df_acls.to_html(file_name)
 
     def export_network_interfaces_to(self, export_format, file_name):
-        """Convert all the network interfaces in a AWS  to a excel, csv, readme, or html
+        """Convert all the Network interfaces in a AWS  to a excel, csv, readme, or html
 
          * export_format: html,string,csv, excel or markdown
          * file_name: file name to save the results.

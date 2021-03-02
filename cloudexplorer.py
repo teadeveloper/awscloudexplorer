@@ -10,7 +10,5 @@ class App(npyscreen.NPSAppManaged):
             'MAIN', aws_form.AwsMeanForm, name="AWS Cloud Explorer")
 
 if (__name__ == "__main__"):
-    try:
-        CloudExplorer = App().run()
-    except:
-        print ("Exiting")
+
+    CloudExplorer = App().run()

@@ -69,14 +69,14 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
 
     ec2 = AwsEc2(aws_end_end_point, aws_region)
     s3 = AwsS3(aws_end_end_point, aws_region)
-    network = AwsNetwork(aws_end_end_point, aws_region)
+    Network = AwsNetwork(aws_end_end_point, aws_region)
     Security = AwsSecurity(aws_end_end_point, aws_region)
 
     def create(self):  # override the Form’s create() method, which is called whenever a Form is created
 
         npyscreen.setTheme(npyscreen.Themes.ElegantTheme)
         self.aws_ec2_menu = self.add_menu(name="Instances EC2")
-        self.aws_s3_menu = self.add_menu(name="S3 Buckets")
+        self.aws_storage_menu = self.add_menu(name="Storage")
         self.aws_network_menu = self.add_menu(name="Network")
         self.aws_security_menu = self.add_menu(name="Security")
 
@@ -85,8 +85,9 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
             ("Export with all columns", self.ec2_all_keys_export_to),
         ])
 
-        self.aws_s3_menu.addItemsFromList([
+        self.aws_storage_menu.addItemsFromList([
             ("Export Buckets", self.s3_export_to),
+            ("Export EBS", self.ebs_export_to),
         ])
 
         self.aws_network_menu.addItemsFromList([
@@ -125,7 +126,14 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
                 #'color': "WARNING",
                 #'widgets_inherit_color': True,
                 'name': "",
-                'values': ["EC2", "Buckets", "VPC", "Subnets", "ACLs Network", "Security Groups", "Network interfaces", "IAM"]})
+                'values': ["EC2",
+                           "Buckets",
+                           "VPC",
+                           "Subnets",
+                           "ACLs Network",
+                           "Security Groups",
+                           "Network interfaces",
+                           "EBS"]})
 
         self.tw_aws_grid = self.add(
             BoxAwsTableWidgetBox,
@@ -175,57 +183,51 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
         self.tw_information.display()
 
         npyscreen.notify_wait("Working. .", form_color='GOOD')
+        self.tw_aws_grid.name = act_on_this
 
         if act_on_this == "Buckets":
             self.tw_aws_service.value = 1
-            self.tw_aws_grid.name = act_on_this
             self.buckets_list = self.s3.get_buckets()
             self.tw_aws_grid.values = self.buckets_list
-            self.tw_aws_grid.update(clear=True)
-            self.tw_aws_grid.display()
+
         elif act_on_this == "EC2":
             self.tw_aws_service.value = 0
             self.tw_aws_grid.name = act_on_this
             self.ec2_list = self.ec2.get_instances()
-            self.tw_aws_grid.values = self.ec2_list
-            self.tw_aws_grid.update(clear=True)
-            self.tw_aws_grid.display()
+
         elif act_on_this == "VPC":
             self.tw_aws_service.value = 2
-            self.tw_aws_grid.name = act_on_this
-            self.vpc_list = self.network.get_vpcs()
+            self.vpc_list = self.Network.get_vpcs()
             self.tw_aws_grid.values = self.vpc_list
-            self.tw_aws_grid.update(clear=True)
-            self.tw_aws_grid.display()
+
         elif act_on_this == "Subnets":
             self.tw_aws_service.value = 3
-            self.tw_aws_grid.name = act_on_this
-            self.subnet_list = self.network.get_subnets()
+            self.subnet_list = self.Network.get_subnets()
             self.tw_aws_grid.values = self.subnet_list
-            self.tw_aws_grid.update(clear=True)
-            self.tw_aws_grid.display()
+
         elif act_on_this == "ACLs Network":
             self.tw_aws_service.value = 4
-            self.tw_aws_grid.name = act_on_this
-            self.acl_list = self.network.get_acl_network()
+            self.acl_list = self.Network.get_acl_network()
             self.tw_aws_grid.values = self.acl_list
-            self.tw_aws_grid.update(clear=True)
-            self.tw_aws_grid.display()
+
         elif act_on_this == "Security Groups":
             self.tw_aws_service.value = 5
-            self.tw_aws_grid.name = act_on_this
             self.securitygroups_list = self.Security.get_security_groups()
             self.tw_aws_grid.values = self.securitygroups_list
-            self.tw_aws_grid.update(clear=True)
-            self.tw_aws_grid.display()
+
         elif act_on_this == "Network interfaces":
             self.tw_aws_service.value = 6
-            self.tw_aws_grid.name = act_on_this
-            self.network_interfaces_list = self.network.get_network_interfaces()
+            self.network_interfaces_list = self.Network.get_network_interfaces()
             self.tw_aws_grid.values = self.network_interfaces_list
-            self.tw_aws_grid.update(clear=True)
-            self.tw_aws_grid.display()
 
+        elif act_on_this == "EBS":
+            self.tw_aws_service.value = 7
+            ebs_list = self.ec2.get_ebs()
+            self.tw_aws_grid.values = ebs_list
+
+
+        self.tw_aws_grid.update(clear=True)
+        self.tw_aws_grid.display()
 
     def ec2_export_to(self):
 
@@ -249,14 +251,15 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
             npyscreen.notify_wait("Working...", form_color='GOOD')
 
         user_options_chosen = self.form_export_to()
-        self.network.export_vpc_to(user_options_chosen[0], user_options_chosen[1])
+        self.Network.export_vpc_to(user_options_chosen[0], user_options_chosen[1])
+
 
     def network_interfaces_export_to(self):
         def info_message():
             npyscreen.notify_wait("Working...", form_color='GOOD')
 
         user_options_chosen = self.form_export_to()
-        self.network.export_network_interfaces_to(user_options_chosen[0], user_options_chosen[1])
+        self.Network.export_network_interfaces_to(user_options_chosen[0], user_options_chosen[1])
 
     def security_group_export_to(self):
 
@@ -272,7 +275,15 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
             npyscreen.notify_wait("Working...", form_color='GOOD')
 
         user_options_chosen = self.form_export_to()
-        self.network.export_subnet_to(user_options_chosen[0], user_options_chosen[1])
+        self.Network.export_subnet_to(user_options_chosen[0], user_options_chosen[1])
+
+    def ebs_export_to(self):
+
+        def info_message():
+            npyscreen.notify_wait("Working...", form_color='GOOD')
+
+        user_options_chosen = self.form_export_to()
+        self.ec2.export_ebs_to(user_options_chosen[0], user_options_chosen[1])
 
     def acls_export_to(self):
 
@@ -280,7 +291,7 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
             npyscreen.notify_wait("Working...", form_color='GOOD')
 
         user_options_chosen = self.form_export_to()
-        self.network.export_acl_to(user_options_chosen[0], user_options_chosen[1])
+        self.Network.export_acl_to(user_options_chosen[0], user_options_chosen[1])
 
     def ec2_all_keys_export_to(self):
 
@@ -308,9 +319,9 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
 
         """
 
+        npyscreen.notify("Reading Information for" + self.service_selected,
+                         title="Information")
         if self.service_selected == "EC2":
-            npyscreen.notify("Reading Information for EC2 Instance",
-                             title="Information")
             # get the value in row selected
             ec2id = self.tw_aws_grid.entry_widget.selected_row()
 
@@ -319,8 +330,6 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
             self.tw_information.update()
 
         elif self.service_selected == "Buckets":
-            npyscreen.notify("Reading Information for Bucket",
-                             title="Information")
             # get the value in row selected
             bucket_id = self.tw_aws_grid.entry_widget.selected_row()
             bucket_objects_result = self.s3.get_bucket_yml_properties(bucket_id[0])
@@ -328,35 +337,27 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
             self.tw_information.update()
 
         elif self.service_selected == "VPC":
-            npyscreen.notify("Reading Information for VPC",
-                             title="Information")
             # get the value in row selected
             vpc_id = self.tw_aws_grid.entry_widget.selected_row()
-            vpc_config_result = self.network.get_vpc_yml_properties(vpc_id[0])
+            vpc_config_result = self.Network.get_vpc_yml_properties(vpc_id[0])
             self.tw_information.values = vpc_config_result
             self.tw_information.update()
 
         elif self.service_selected == "Subnets":
-            npyscreen.notify("Reading Information for Subnet",
-                             title="Information")
             # get the value in row selected
             subnet_id = self.tw_aws_grid.entry_widget.selected_row()
-            subnet_config_result = self.network.get_subnet_yml_properties(subnet_id[0])
+            subnet_config_result = self.Network.get_subnet_yml_properties(subnet_id[0])
             self.tw_information.values = subnet_config_result
             self.tw_information.update()
 
         elif self.service_selected == "ACLs Network":
-            npyscreen.notify("Reading Information for ACLs",
-                             title="Information")
             # get the value in row selected
             acl_id = self.tw_aws_grid.entry_widget.selected_row()
-            subnet_config_result = self.network.get_acl_yml_network_properties(acl_id[0])
+            subnet_config_result = self.Network.get_acl_yml_network_properties(acl_id[0])
             self.tw_information.values = subnet_config_result
             self.tw_information.update()
 
         elif self.service_selected == "Security Groups":
-            npyscreen.notify("Reading Information for Security Groups",
-                             title="Information")
             # get the value in row selected
             security_group_id = self.tw_aws_grid.entry_widget.selected_row()
             security_group_result = self.Security.get_security_groups_yml_properties(security_group_id[0])
@@ -364,11 +365,15 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
             self.tw_information.update()
 
         elif self.service_selected == "Network interfaces":
-            npyscreen.notify("Reading Information for Network interfaces",
-                             title="Information")
             # get the value in row selected
             object_id = self.tw_aws_grid.entry_widget.selected_row()
-            data_result = self.network.get_network_interface_properties(object_id[0])
+            data_result = self.Network.get_network_interface_properties(object_id[0])
+            self.tw_information.values = data_result
+            self.tw_information.update()
+        elif self.service_selected == "EBS":
+            # get the value in row selected
+            object_id = self.tw_aws_grid.entry_widget.selected_row()
+            data_result = self.ec2.get_ebs_yml_properties(object_id[0])
             self.tw_information.values = data_result
             self.tw_information.update()
 
@@ -389,7 +394,7 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
         file_name_path = export_form.add(
             npyscreen.TitleText, name="File and name path:", )
 
-        file_name_path.value = "type_filename.ext"
+        file_name_path.value = "/tmp/filename.txt"
 
         export_form.edit()
 
@@ -448,14 +453,14 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
                 self.Security.security_groups_filters = custom_filter.values[value_selected]
                 data = self.Security.get_security_groups()
             elif self.service_selected == "VPC":
-                self.network.vpc_filters = custom_filter.values[value_selected]
-                data = self.network.get_vpcs()
+                self.Network.vpc_filters = custom_filter.values[value_selected]
+                data = self.Network.get_vpcs()
             elif self.service_selected == "Subnets":
-                self.network.subnets_filters = custom_filter.values[value_selected]
-                data = self.network.get_subnets()
+                self.Network.subnets_filters = custom_filter.values[value_selected]
+                data = self.Network.get_subnets()
             elif self.service_selected == "ACLs Network":
-                self.network.acl_network_filters = custom_filter.values[value_selected]
-                data = self.network.get_acl_network()
+                self.Network.acl_network_filters = custom_filter.values[value_selected]
+                data = self.Network.get_acl_network()
             else:
                 pass
 
@@ -482,12 +487,14 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
         elif self.service_selected == "Buckets":
             self.s3.export_s3_yaml(object_id[0])
         elif self.service_selected == "VPC":
-            self.network.export_vpc_yaml(object_id[0])
+            self.Network.export_vpc_yaml(object_id[0])
         elif self.service_selected == "Subnets":
-            self.network.export_subnets_yaml(object_id[0])
+            self.Network.export_subnets_yaml(object_id[0])
         elif self.service_selected == "ACLs Network":
-            self.network.export_acls_yaml(object_id[0])
+            self.Network.export_acls_yaml(object_id[0])
         elif self.service_selected == "Security Groups":
             self.Security.export_security_group_yaml(object_id[0])
         elif self.service_selected == "Network interfaces":
-            self.network.export_network_interface_yaml(object_id[0])
+            self.Network.export_network_interface_yaml(object_id[0])
+        elif self.service_selected == "EBS":
+            self.ec2.export_ebs_yml(object_id[0])
