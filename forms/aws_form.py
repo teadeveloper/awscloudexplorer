@@ -133,7 +133,8 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
                            "ACLs Network",
                            "Security Groups",
                            "Network interfaces",
-                           "EBS"]})
+                           "EBS",
+                           "ECS"]})
 
         self.tw_aws_grid = self.add(
             BoxAwsTableWidgetBox,
@@ -425,6 +426,8 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
             values_filter = configuration["subnets_filters"]
         elif self.service_selected == "ACLs Network":
             values_filter = configuration["acl_network_filters"]
+        elif self.service_selected == "EBS":
+            values_filter = configuration["ebs_filters"]
         else:
             values_filter = None
             label_name = "Feature not supported yet for " + self.service_selected
@@ -461,6 +464,9 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
             elif self.service_selected == "ACLs Network":
                 self.Network.acl_network_filters = custom_filter.values[value_selected]
                 data = self.Network.get_acl_network()
+            elif self.service_selected == "EBS":
+                self.ec2.ebs_filters = custom_filter.values[value_selected]
+                data = self.ec2.get_ebs()
             else:
                 pass
 

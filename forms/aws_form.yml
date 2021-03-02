@@ -44,6 +44,9 @@ subnets_filters:
   - [{"Name" :"tag:tag1", "Values":["val*"] }]
   - [{"Name" :"tag:tag1", "Values":["example*"] }]
 
+ebs_filters:
+  - [ ] # List all]
+  - [ { "Name": "tag:tag1", "Values": [ "val*" ] } ]
 
 tw_region_relx: 2
 tw_region_rely: 2
