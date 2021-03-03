@@ -30,6 +30,8 @@ from providers.aws.ec2 import AwsEc2
 from providers.aws.s3 import AwsS3
 from providers.aws.network import AwsNetwork
 from providers.aws.security import AwsSecurity
+from providers.aws.efs import AwsEfs
+
 from functools import partial
 
 class AwsRegionWidget(npyscreen.MultiLineAction):
@@ -71,6 +73,7 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
     s3 = AwsS3(aws_end_end_point, aws_region)
     Network = AwsNetwork(aws_end_end_point, aws_region)
     Security = AwsSecurity(aws_end_end_point, aws_region)
+    EFS = AwsEfs(aws_end_end_point, aws_region)
 
     def create(self):  # override the Form’s create() method, which is called whenever a Form is created
 
@@ -88,6 +91,7 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
         self.aws_storage_menu.addItemsFromList([
             ("Export Buckets", self.s3_export_to),
             ("Export EBS", self.ebs_export_to),
+            ("Export EFS", self.efs_export_to),
         ])
 
         self.aws_network_menu.addItemsFromList([
@@ -127,14 +131,15 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
                 #'widgets_inherit_color': True,
                 'name': "",
                 'values': ["EC2",
-                           "Buckets",
                            "VPC",
                            "Subnets",
                            "ACLs Network",
                            "Security Groups",
                            "Network interfaces",
+                           "Buckets",
                            "EBS",
-                           "ECS"]})
+                           "EFS",
+                           ]})
 
         self.tw_aws_grid = self.add(
             BoxAwsTableWidgetBox,
@@ -187,44 +192,50 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
         self.tw_aws_grid.name = act_on_this
 
         if act_on_this == "Buckets":
-            self.tw_aws_service.value = 1
-            self.buckets_list = self.s3.get_buckets()
-            self.tw_aws_grid.values = self.buckets_list
+            self.tw_aws_service.value = 6
+            buckets_list = self.s3.get_buckets()
+            self.tw_aws_grid.values = buckets_list
 
         elif act_on_this == "EC2":
             self.tw_aws_service.value = 0
-            self.tw_aws_grid.name = act_on_this
-            self.ec2_list = self.ec2.get_instances()
+            ec2_list = self.ec2.get_instances()
+            self.tw_aws_grid.values = ec2_list
 
         elif act_on_this == "VPC":
-            self.tw_aws_service.value = 2
-            self.vpc_list = self.Network.get_vpcs()
-            self.tw_aws_grid.values = self.vpc_list
+            self.tw_aws_service.value = 1
+            vpc_list = self.Network.get_vpcs()
+            self.tw_aws_grid.values = vpc_list
 
         elif act_on_this == "Subnets":
-            self.tw_aws_service.value = 3
-            self.subnet_list = self.Network.get_subnets()
-            self.tw_aws_grid.values = self.subnet_list
+            self.tw_aws_service.value = 2
+            subnet_list = self.Network.get_subnets()
+            self.tw_aws_grid.values = subnet_list
 
         elif act_on_this == "ACLs Network":
-            self.tw_aws_service.value = 4
-            self.acl_list = self.Network.get_acl_network()
-            self.tw_aws_grid.values = self.acl_list
+            self.tw_aws_service.value = 2
+            acl_list = self.Network.get_acl_network()
+            self.tw_aws_grid.values = acl_list
 
         elif act_on_this == "Security Groups":
-            self.tw_aws_service.value = 5
-            self.securitygroups_list = self.Security.get_security_groups()
-            self.tw_aws_grid.values = self.securitygroups_list
+            self.tw_aws_service.value = 4
+            securitygroups_list = self.Security.get_security_groups()
+            self.tw_aws_grid.values = securitygroups_list
 
         elif act_on_this == "Network interfaces":
-            self.tw_aws_service.value = 6
-            self.network_interfaces_list = self.Network.get_network_interfaces()
-            self.tw_aws_grid.values = self.network_interfaces_list
+            self.tw_aws_service.value = 5
+            network_interfaces_list = self.Network.get_network_interfaces()
+            self.tw_aws_grid.values = network_interfaces_list
 
         elif act_on_this == "EBS":
             self.tw_aws_service.value = 7
             ebs_list = self.ec2.get_ebs()
             self.tw_aws_grid.values = ebs_list
+
+        elif act_on_this == "EFS":
+            self.tw_aws_service.value = 8
+            efs_list = self.EFS.get_efs()
+            self.tw_aws_grid.values = efs_list
+
 
 
         self.tw_aws_grid.update(clear=True)
@@ -246,6 +257,7 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
         user_options_chosen = self.form_export_to()
         self.s3.export_to(user_options_chosen[0], user_options_chosen[1])
 
+
     def vpc_export_to(self):
 
         def info_message():
@@ -253,7 +265,6 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
 
         user_options_chosen = self.form_export_to()
         self.Network.export_vpc_to(user_options_chosen[0], user_options_chosen[1])
-
 
     def network_interfaces_export_to(self):
         def info_message():
@@ -285,6 +296,14 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
 
         user_options_chosen = self.form_export_to()
         self.ec2.export_ebs_to(user_options_chosen[0], user_options_chosen[1])
+
+    def efs_export_to(self):
+
+        def info_message():
+            npyscreen.notify_wait("Working...", form_color='GOOD')
+
+        user_options_chosen = self.form_export_to()
+        self.EFS.export_to(user_options_chosen[0], user_options_chosen[1])
 
     def acls_export_to(self):
 
@@ -325,58 +344,60 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
         if self.service_selected == "EC2":
             # get the value in row selected
             ec2id = self.tw_aws_grid.entry_widget.selected_row()
-
             ec2_instance_result = self.ec2.get_ec2_yml_properties(ec2id[1])
             self.tw_information.values = ec2_instance_result
-            self.tw_information.update()
+
 
         elif self.service_selected == "Buckets":
             # get the value in row selected
             bucket_id = self.tw_aws_grid.entry_widget.selected_row()
             bucket_objects_result = self.s3.get_bucket_yml_properties(bucket_id[0])
             self.tw_information.values = bucket_objects_result
-            self.tw_information.update()
 
         elif self.service_selected == "VPC":
             # get the value in row selected
             vpc_id = self.tw_aws_grid.entry_widget.selected_row()
             vpc_config_result = self.Network.get_vpc_yml_properties(vpc_id[0])
             self.tw_information.values = vpc_config_result
-            self.tw_information.update()
 
         elif self.service_selected == "Subnets":
             # get the value in row selected
             subnet_id = self.tw_aws_grid.entry_widget.selected_row()
             subnet_config_result = self.Network.get_subnet_yml_properties(subnet_id[0])
             self.tw_information.values = subnet_config_result
-            self.tw_information.update()
 
         elif self.service_selected == "ACLs Network":
             # get the value in row selected
             acl_id = self.tw_aws_grid.entry_widget.selected_row()
             subnet_config_result = self.Network.get_acl_yml_network_properties(acl_id[0])
             self.tw_information.values = subnet_config_result
-            self.tw_information.update()
 
         elif self.service_selected == "Security Groups":
             # get the value in row selected
             security_group_id = self.tw_aws_grid.entry_widget.selected_row()
             security_group_result = self.Security.get_security_groups_yml_properties(security_group_id[0])
             self.tw_information.values = security_group_result
-            self.tw_information.update()
 
         elif self.service_selected == "Network interfaces":
             # get the value in row selected
             object_id = self.tw_aws_grid.entry_widget.selected_row()
             data_result = self.Network.get_network_interface_properties(object_id[0])
             self.tw_information.values = data_result
-            self.tw_information.update()
+
         elif self.service_selected == "EBS":
             # get the value in row selected
             object_id = self.tw_aws_grid.entry_widget.selected_row()
             data_result = self.ec2.get_ebs_yml_properties(object_id[0])
             self.tw_information.values = data_result
-            self.tw_information.update()
+
+        elif self.service_selected == "EFS":
+            # get the value in row selected
+            object_id = self.tw_aws_grid.entry_widget.selected_row()
+            data_result = self.EFS.get_efs_yml_properties(object_id[0])
+            self.tw_information.values = data_result
+
+        self.tw_information.update()
+
 
     def form_export_to(self):
         """Show the form to select the export_format and the file name
@@ -488,19 +509,24 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
         object_id = self.tw_aws_grid.entry_widget.selected_row()
         npyscreen.notify("Exporting data to " + object_id[0] + ".yml", title="Information")
 
-        if self.service_selected == "EC2":
-            self.ec2.export_instance_yaml(object_id[1])
-        elif self.service_selected == "Buckets":
-            self.s3.export_s3_yaml(object_id[0])
-        elif self.service_selected == "VPC":
-            self.Network.export_vpc_yaml(object_id[0])
-        elif self.service_selected == "Subnets":
-            self.Network.export_subnets_yaml(object_id[0])
-        elif self.service_selected == "ACLs Network":
-            self.Network.export_acls_yaml(object_id[0])
-        elif self.service_selected == "Security Groups":
-            self.Security.export_security_group_yaml(object_id[0])
-        elif self.service_selected == "Network interfaces":
-            self.Network.export_network_interface_yaml(object_id[0])
-        elif self.service_selected == "EBS":
-            self.ec2.export_ebs_yml(object_id[0])
+        try:
+            if self.service_selected == "EC2":
+                self.ec2.export_instance_yaml(object_id[1])
+            elif self.service_selected == "Buckets":
+                self.s3.export_s3_yaml(object_id[0])
+            elif self.service_selected == "VPC":
+                self.Network.export_vpc_yaml(object_id[0])
+            elif self.service_selected == "Subnets":
+                self.Network.export_subnets_yaml(object_id[0])
+            elif self.service_selected == "ACLs Network":
+                self.Network.export_acls_yaml(object_id[0])
+            elif self.service_selected == "Security Groups":
+                self.Security.export_security_group_yaml(object_id[0])
+            elif self.service_selected == "Network interfaces":
+                self.Network.export_network_interface_yaml(object_id[0])
+            elif self.service_selected == "EBS":
+                self.ec2.export_ebs_yml(object_id[0])
+            elif self.service_selected == "EFS":
+                self.EFS.export_efs_yaml(object_id[0])
+        except:
+            pass
