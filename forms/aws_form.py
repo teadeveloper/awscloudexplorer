@@ -416,7 +416,7 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
         file_name_path = export_form.add(
             npyscreen.TitleText, name="File and name path:", )
 
-        file_name_path.value = "/tmp/filename.txt"
+        file_name_path.value = "changeme.txt"
 
         export_form.edit()
 
