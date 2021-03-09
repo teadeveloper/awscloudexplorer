@@ -42,6 +42,7 @@ class AwsNetwork:
             vpc_data = [vpc["VpcId"], vpc["CidrBlock"], vpc["State"], vpc["DhcpOptionsId"], vpc["InstanceTenancy"]]
             vpcs_list.append(vpc_data)
 
+        vpcs_list.insert(0,["VPC ID","CDIR BLOCK","STATE","DHCP OPTIONS","TENANCY"])
         return vpcs_list
 
     def get_subnets(self):
@@ -58,6 +59,7 @@ class AwsNetwork:
                            subnet["AvailabilityZone"],subnet["AvailabilityZoneId"]]
             subnets_list.append(subnet_data)
 
+        subnets_list.insert(0,["SUBNET ID","CDIR BLOCK","AVAILABLE IP","VPC ID","AVAILABLE ZONE","AVAILABLE ZONE ID"])
         return subnets_list
 
     def get_acl_network(self):
@@ -72,6 +74,7 @@ class AwsNetwork:
             acl_data = [acl["NetworkAclId"],acl["VpcId"]]
             acl_network_list.append(acl_data)
 
+        acl_network_list.insert(0,["NETWORK ACL ID","VPC ID"])
         return acl_network_list
 
     def get_network_interfaces(self):
@@ -86,7 +89,7 @@ class AwsNetwork:
             interface_data = [interface["NetworkInterfaceId"],interface["Description"],interface["AvailabilityZone"],interface["MacAddress"],interface["OwnerId"]]
             network_interfaces_list.append(interface_data)
 
-
+        network_interfaces_list.insert(0,["INTERFACE ID","DESCRIPTION","AVAILABILITY ZONE","MAC ADDRESS","OWNERID"])
         return network_interfaces_list
 
     def get_subnet_yml_properties(self, subnet_id):

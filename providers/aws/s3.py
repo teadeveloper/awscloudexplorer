@@ -33,6 +33,8 @@ class AwsS3:
             bucket_data = [bucket["Name"], bucket["CreationDate"], self.s3_client.get_bucket_location(
                 Bucket=bucket['Name'])['LocationConstraint']]
             buckets_list.append(bucket_data)
+
+        buckets_list.insert(0,["NAME","CREATION DATE","LOCATION CONSTRAINT"])
         return buckets_list
 
     def get_bucket_yml_properties(self, bucket_id):

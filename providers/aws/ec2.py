@@ -58,6 +58,7 @@ class AwsEc2:
             ec2_instance.append(instance.state["Name"])
             ec2_instances.append(ec2_instance)
 
+        ec2_instances.insert(0,["NAME","ID","TYPE","PUBLIC IP","PRIVATE IP","IMAGE ID","STATE"])
         return ec2_instances
 
     def get_ebs(self):
@@ -72,6 +73,8 @@ class AwsEc2:
         for ebs in response_ebs_list:
             ebs_data = [ebs["VolumeId"], ebs["Size"], ebs["VolumeType"], ebs["Iops"], ebs["Encrypted"]]
             ebs_volumes.append((ebs_data))
+
+        ebs_volumes.insert(0,["VOLUME ID","SIZE","TYPE","IOPS","ENCRYPTED"])
         return ebs_volumes
 
     def get_ebs_yml_properties(self, ebs_id):
@@ -127,7 +130,7 @@ class AwsEc2:
         N/A
         """
         with open("forms/aws_form.yml") as f:
-            configuration = yaml.safe_load(f, Loader=yaml.FullLoader)
+            configuration = yaml.safe_load(f)
 
         ec2_keys = configuration["ec2_export_selected_keys"]
 
