@@ -61,7 +61,7 @@ class BoxAwsDetailWidget(npyscreen.BoxTitle):
 
 class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
     with open("forms/aws_form.yml") as f:
-        configuration = yaml.load(f, Loader=yaml.FullLoader)
+        configuration = yaml.safe_load(f, Loader=yaml.FullLoader)
 
     # General variables
     service_selected = ""
@@ -435,7 +435,7 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
         label_name = "Select filter"
 
         with open("forms/aws_form.yml") as f:
-            configuration = yaml.load(f, Loader=yaml.FullLoader)
+            configuration = yaml.safe_load(f, Loader=yaml.FullLoader)
 
         if self.service_selected == "EC2":
             values_filter = configuration["ec2_filters"]

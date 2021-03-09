@@ -127,7 +127,7 @@ class AwsEc2:
         N/A
         """
         with open("forms/aws_form.yml") as f:
-            configuration = yaml.load(f, Loader=yaml.FullLoader)
+            configuration = yaml.safe_load(f, Loader=yaml.FullLoader)
 
         ec2_keys = configuration["ec2_export_selected_keys"]
 
