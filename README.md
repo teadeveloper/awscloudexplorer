@@ -1,3 +1,5 @@
+[![CodeFactor](https://www.codefactor.io/repository/github/teadeveloper/awscloudexplorer/badge?s=e65ddad85c3e993c6ec4a68e3fe046d32e67e472)](https://www.codefactor.io/repository/github/teadeveloper/awscloudexplorer)
+
 <p align="center">
 <img src="images/logo.png" width="750" height="250">
 </p> 
