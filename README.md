@@ -13,13 +13,13 @@ Main features:
 
 TUI:
 
-* Explore the resources quicky from your terminal in Linux, Mac or Windows (CMD & WLS) using your console accounts or programmatic accounts.:relieved:
-* Get quickly the resource configuraion.
+* Explore the resources' quickly from your terminal in Linux, Mac or Windows (CMD & WLS) using your console accounts or programmatic accounts.:relieved:
+* Get quickly the resource configuration.
 * Support filters (if supported by AWS API).
 * Export the configuration of a resource to YML.
-* Export all resources VPCs, EC2s, Buckets etc.. to YML, Excel, CSV, Markdown, HTML and String.
+* Export all resources VPCs, EC2s, Buckets etc. to YML, Excel, CSV, Markdown, HTML and String.
 
-Dasboard:
+Dashboard:
  
 Of course, no one template will serve all projects since your needs may be different. So I'll be adding more in the near future. You may also suggest changes by forking this repo and creating a pull request or opening an issue. Thanks to all the people have have contributed to expanding this template!
 
