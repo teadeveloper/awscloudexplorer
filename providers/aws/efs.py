@@ -51,7 +51,6 @@ class AwsEfs:
             efs_data = self.efs_client.describe_file_systems(FileSystemId=efs_id)
             results_efs_data = yaml.safe_dump(efs_data).splitlines()
             return results_efs_data
-
         except:
             return ["You have selected the HEAD, please select an item."]
 

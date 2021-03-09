@@ -34,30 +34,39 @@ from providers.aws.efs import AwsEfs
 
 from functools import partial
 
+
 class AwsRegionWidget(npyscreen.MultiLineAction):
     pass
 
+
 class AwsTableWidget(npyscreen.SimpleGrid):
     pass
+
 
 class AwsServiceWidget(npyscreen.MultiLineAction):
     def actionHighlighted(self, act_on_this, keypress):
         self.parent.parentApp.getForm('MAIN').act_service_selected_action(act_on_this)
 
+
 class AwsInformationWidget(npyscreen.MultiLine):
     pass
+
 
 class BoxAwsRegionWidgetBox(npyscreen.BoxTitle):
     _contained_widget = AwsRegionWidget
 
+
 class BoxAwsTableWidgetBox(npyscreen.BoxTitle):
     _contained_widget = AwsTableWidget
+
 
 class BoxAwsServiceWidget(npyscreen.BoxTitle):
     _contained_widget = AwsServiceWidget
 
+
 class BoxAwsDetailWidget(npyscreen.BoxTitle):
     _contained_widget = AwsInformationWidget
+
 
 class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
     with open("forms/aws_form.yml") as f:
@@ -114,8 +123,8 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
             height=self.configuration["tw_region_height"],
             scroll_exit=True,
             contained_widget_arguments={
-                #'color': "WARNING",
-                #'widgets_inherit_color': True,
+                # 'color': "WARNING",
+                # 'widgets_inherit_color': True,
                 'edit': False,
                 'values': [os.getenv('AWS_DEFAULT_REGION')], }, )
 
@@ -127,8 +136,8 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
             width=self.configuration["tw_service_width"],
             scroll_exit=True,
             contained_widget_arguments={
-                #'color': "WARNING",
-                #'widgets_inherit_color': True,
+                # 'color': "WARNING",
+                # 'widgets_inherit_color': True,
                 'name': "",
                 'values': ["EC2",
                            "VPC",
@@ -149,7 +158,7 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
             width=self.configuration["tw_grid_width"],
             name="Select Service in the left menu",
             contained_widget_arguments={
-                #'color': "DEFAULT",
+                # 'color': "DEFAULT",
                 # 'widgets_inherit_color': True,
                 'select_whole_line': "True",
                 'column_width': 20,
@@ -165,8 +174,8 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
 
             scroll_exit=True,
             contained_widget_arguments={
-                #'color': "WARNING",
-                #'widgets_inherit_color': True,
+                # 'color': "WARNING",
+                # 'widgets_inherit_color': True,
             })
 
         # DEFAULT VALUES STARTING THE FORM
@@ -179,7 +188,6 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
         self.tw_aws_grid.add_handlers({"^F": self.form_custom_filter})
 
         self.tw_aws_service.value = 0
-
 
     def act_service_selected_action(self, act_on_this):
 
@@ -236,8 +244,6 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
             efs_list = self.EFS.get_efs()
             self.tw_aws_grid.values = efs_list
 
-
-
         self.tw_aws_grid.update(clear=True)
         self.tw_aws_grid.display()
 
@@ -256,7 +262,6 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
 
         user_options_chosen = self.form_export_to()
         self.s3.export_to(user_options_chosen[0], user_options_chosen[1])
-
 
     def vpc_export_to(self):
 
@@ -398,7 +403,6 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
 
         self.tw_information.update()
 
-
     def form_export_to(self):
         """Show the form to select the export_format and the file name
 
@@ -529,4 +533,4 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
             elif self.service_selected == "EFS":
                 self.EFS.export_efs_yaml(object_id[0])
         except:
-            print ("error exporting to yml in GRID")
+            print("error exporting to yml in GRID")
