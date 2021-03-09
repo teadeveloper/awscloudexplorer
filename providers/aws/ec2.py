@@ -151,7 +151,7 @@ class AwsEc2:
                         else:
                             ec2_properties[value] = str(instance[value])
                     except:
-                        pass
+                        print("Error evaluating if list or dict in EC2")
 
                 ec2_instances.append(ec2_properties)
                 ec2_properties = {}
@@ -215,7 +215,7 @@ class AwsEc2:
                         else:
                             ec2_properties[value] = str(instance[value])
                     except:
-                        pass
+                        print("Error evaluating if list or dict in EC2")
 
                 ec2_instances.append(ec2_properties)
                 ec2_properties = {}

@@ -529,4 +529,4 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
             elif self.service_selected == "EFS":
                 self.EFS.export_efs_yaml(object_id[0])
         except:
-            pass
+            print ("error exporting to yml in GRID")
