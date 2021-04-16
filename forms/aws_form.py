@@ -31,6 +31,7 @@ from providers.aws.s3 import AwsS3
 from providers.aws.network import AwsNetwork
 from providers.aws.security import AwsSecurity
 from providers.aws.efs import AwsEfs
+from providers.aws.iam import AwsIam
 
 from functools import partial
 
@@ -83,6 +84,7 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
     Network = AwsNetwork(aws_end_end_point, aws_region)
     Security = AwsSecurity(aws_end_end_point, aws_region)
     EFS = AwsEfs(aws_end_end_point, aws_region)
+    IAM = AwsIam(aws_end_end_point, aws_region)
 
     def create(self):  # override the Form’s create() method, which is called whenever a Form is created
 
@@ -148,6 +150,10 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
                            "Buckets",
                            "EBS",
                            "EFS",
+                           "Users",
+                           "Groups",
+                           "Roles",
+                           "Policies",
                            ]})
 
         self.tw_aws_grid = self.add(
@@ -201,48 +207,68 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
 
         if act_on_this == "Buckets":
             self.tw_aws_service.value = 6
-            buckets_list = self.s3.get_buckets()
-            self.tw_aws_grid.values = buckets_list
+            data = self.s3.get_buckets()
+            self.tw_aws_grid.values = data
 
         elif act_on_this == "EC2":
             self.tw_aws_service.value = 0
-            ec2_list = self.ec2.get_instances()
-            self.tw_aws_grid.values = ec2_list
+            data = self.ec2.get_instances()
+            self.tw_aws_grid.values = data
 
         elif act_on_this == "VPC":
             self.tw_aws_service.value = 1
-            vpc_list = self.Network.get_vpcs()
-            self.tw_aws_grid.values = vpc_list
+            data = self.Network.get_vpcs()
+            self.tw_aws_grid.values = data
 
         elif act_on_this == "Subnets":
             self.tw_aws_service.value = 2
-            subnet_list = self.Network.get_subnets()
-            self.tw_aws_grid.values = subnet_list
+            data = self.Network.get_subnets()
+            self.tw_aws_grid.values = data
 
         elif act_on_this == "ACLs Network":
             self.tw_aws_service.value = 2
-            acl_list = self.Network.get_acl_network()
-            self.tw_aws_grid.values = acl_list
+            data = self.Network.get_acl_network()
+            self.tw_aws_grid.values = data
 
         elif act_on_this == "Security Groups":
             self.tw_aws_service.value = 4
-            securitygroups_list = self.Security.get_security_groups()
-            self.tw_aws_grid.values = securitygroups_list
+            data = self.Security.get_security_groups()
+            self.tw_aws_grid.values = data
 
         elif act_on_this == "Network interfaces":
             self.tw_aws_service.value = 5
-            network_interfaces_list = self.Network.get_network_interfaces()
-            self.tw_aws_grid.values = network_interfaces_list
+            data = self.Network.get_network_interfaces()
+            self.tw_aws_grid.values = data
 
         elif act_on_this == "EBS":
             self.tw_aws_service.value = 7
-            ebs_list = self.ec2.get_ebs()
-            self.tw_aws_grid.values = ebs_list
+            data = self.ec2.get_ebs()
+            self.tw_aws_grid.values = data
 
         elif act_on_this == "EFS":
             self.tw_aws_service.value = 8
-            efs_list = self.EFS.get_efs()
-            self.tw_aws_grid.values = efs_list
+            data = self.EFS.get_efs()
+            self.tw_aws_grid.values = data
+
+        elif act_on_this == "Users":
+            self.tw_aws_service.value = 9
+            data = self.IAM.get_users()
+            self.tw_aws_grid.values = data
+
+        elif act_on_this == "Groups":
+            self.tw_aws_service.value = 10
+            data = self.IAM.get_groups()
+            self.tw_aws_grid.values = data
+
+        elif act_on_this == "Roles":
+            self.tw_aws_service.value = 11
+            data = self.IAM.get_roles()
+            self.tw_aws_grid.values = data
+
+        elif act_on_this == "Policies":
+            self.tw_aws_service.value = 12
+            data = self.IAM.get_policies()
+            self.tw_aws_grid.values = data
 
         self.tw_aws_grid.update(clear=True)
         self.tw_aws_grid.display()

@@ -26,7 +26,6 @@ class AwsEfs:
         """
         efs_list = []
 
-
         for efs in self.efs_client.describe_file_systems()["FileSystems"]:
             size = efs["SizeInBytes"]["Value"]
             efs_data = [efs["FileSystemId"],size, efs["CreationTime"],efs["Encrypted"],efs["NumberOfMountTargets"],efs["ThroughputMode"]]
