@@ -1,0 +1,5 @@
+,0
+0,AWSCodeDeployRoleForECS
+1,ANPAIIL3KXEKRGEN2HFIO
+2,2018-11-27 20:40:57+00:00
+3,arn:aws:iam::aws:policy/AWSCodeDeployRoleForECS

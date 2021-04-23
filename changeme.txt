@@ -1,0 +1,26 @@
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>0</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>AWSCodeDeployRoleForECS</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>ANPAIIL3KXEKRGEN2HFIO</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2018-11-27 20:40:57+00:00</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>arn:aws:iam::aws:policy/AWSCodeDeployRoleForECS</td>
+    </tr>
+  </tbody>
+</table>

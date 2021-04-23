@@ -93,6 +93,7 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
         self.aws_storage_menu = self.add_menu(name="Storage")
         self.aws_network_menu = self.add_menu(name="Network")
         self.aws_security_menu = self.add_menu(name="Security")
+        self.aws_iam_menu = self.add_menu(name="IAM")
 
         self.aws_ec2_menu.addItemsFromList([
             ("Export instances", self.ec2_export_to),
@@ -116,6 +117,13 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
             ("Export Security Groups", self.security_group_export_to),
         ])
 
+        self.aws_iam_menu.addItemsFromList([
+            ("Export Users", self.users_export_to),
+            ("Export Groups", self.groups_export_to),
+            ("Export Roles", self.roles_export_to),
+            ("Export Policies", self.policies_export_to),
+        ])
+
         self.tw_aws_region = self.add(
             BoxAwsRegionWidgetBox,
             name="Region:",
@@ -136,7 +144,7 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
             relx=self.configuration["tw_service_relx"],
             rely=self.configuration["tw_service_rely"],
             width=self.configuration["tw_service_width"],
-            scroll_exit=True,
+            scroll_exit=False,
             contained_widget_arguments={
                 # 'color': "WARNING",
                 # 'widgets_inherit_color': True,
@@ -352,6 +360,27 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
         user_options_chosen = self.form_export_to()
         info_message()
         self.ec2.all_keys_export_to(user_options_chosen[0], user_options_chosen[1])
+
+    def users_export_to(self):
+        def info_message():
+            npyscreen.notify_wait("Working...", form_color='GOOD')
+        user_options_chosen = self.form_export_to()
+        self.IAM.users_export_to(user_options_chosen[0], user_options_chosen[1])
+    def groups_export_to(self):
+        def info_message():
+            npyscreen.notify_wait("Working...", form_color='GOOD')
+        user_options_chosen = self.form_export_to()
+        self.IAM.groups_export_to(user_options_chosen[0], user_options_chosen[1])
+    def roles_export_to(self):
+        def info_message():
+            npyscreen.notify_wait("Working...", form_color='GOOD')
+        user_options_chosen = self.form_export_to()
+        self.IAM.roles_export_to(user_options_chosen[0], user_options_chosen[1])
+    def policies_export_to(self):
+        def info_message():
+            npyscreen.notify_wait("Working...", form_color='GOOD')
+        user_options_chosen = self.form_export_to()
+        self.IAM.policies_export_to(user_options_chosen[0], user_options_chosen[1])
 
     def update_data_widgets(self):
 

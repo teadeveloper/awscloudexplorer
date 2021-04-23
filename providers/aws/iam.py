@@ -190,3 +190,135 @@ class AwsIam:
         file = open(rolename + ".yml", "w")
         yml_data_result = yaml.safe_dump(data, file)
         file.close()
+
+    def users_export_to(self, export_format, file_name):
+        """Convert all the users in a AWS  to a excel, csv, readme, or html
+
+         * export_format: html,string,csv, excel or markdown
+         * file_name: file name to save the results.
+
+         Returns
+         -------
+         N/A
+
+         """
+        aws_response = self.get_users()
+        users = []
+
+        for user in aws_response:
+            users.append(user)
+
+        df = pd.DataFrame(users)
+
+        if export_format == 0:
+           excel_writer = pd.ExcelWriter(file_name, engine='xlsxwriter')
+           df.to_excel(
+                excel_writer, sheet_name='EFS', index=False)
+           excel_writer.save()
+        elif export_format == 1:
+            df.to_csv(file_name)
+        elif export_format == 2:
+            df.to_string(file_name)
+        elif export_format == 3:
+            df.to_markdown(file_name)
+        elif export_format == 4:
+            df.to_html(file_name)
+
+    def groups_export_to(self, export_format, file_name):
+        """Convert all the groups in a AWS  to a excel, csv, readme, or html
+
+         * export_format: html,string,csv, excel or markdown
+         * file_name: file name to save the results.
+
+         Returns
+         -------
+         N/A
+
+         """
+        aws_response = self.get_groups()
+        groups = []
+
+        for group in aws_response:
+            groups.append(group)
+
+        df = pd.DataFrame(groups)
+
+        if export_format == 0:
+           excel_writer = pd.ExcelWriter(file_name, engine='xlsxwriter')
+           df.to_excel(
+                excel_writer, sheet_name='EFS', index=False)
+           excel_writer.save()
+        elif export_format == 1:
+            df.to_csv(file_name)
+        elif export_format == 2:
+            df.to_string(file_name)
+        elif export_format == 3:
+            df.to_markdown(file_name)
+        elif export_format == 4:
+            df.to_html(file_name)
+
+    def roles_export_to(self, export_format, file_name):
+        """Convert all the roles in a AWS  to a excel, csv, readme, or html
+
+         * export_format: html,string,csv, excel or markdown
+         * file_name: file name to save the results.
+
+         Returns
+         -------
+         N/A
+
+         """
+        aws_response = self.get_roles()
+        roles = []
+
+        for role in aws_response:
+            roles.append(role)
+
+        df = pd.DataFrame(roles)
+
+        if export_format == 0:
+           excel_writer = pd.ExcelWriter(file_name, engine='xlsxwriter')
+           df.to_excel(
+                excel_writer, sheet_name='EFS', index=False)
+           excel_writer.save()
+        elif export_format == 1:
+            df.to_csv(file_name)
+        elif export_format == 2:
+            df.to_string(file_name)
+        elif export_format == 3:
+            df.to_markdown(file_name)
+        elif export_format == 4:
+            df.to_html(file_name)
+
+    def policies_export_to(self, export_format, file_name):
+        """Convert all the groups in a AWS  to a excel, csv, readme, or html
+
+         * export_format: html,string,csv, excel or markdown
+         * file_name: file name to save the results.
+
+         Returns
+         -------
+         N/A
+
+         """
+        aws_response = self.get_policies()
+        policies = []
+
+        for policy in aws_response:
+            policies.append(policy)
+
+        df = pd.DataFrame(policy)
+
+        if export_format == 0:
+           excel_writer = pd.ExcelWriter(file_name, engine='xlsxwriter')
+           df.to_excel(
+                excel_writer, sheet_name='EFS', index=False)
+           excel_writer.save()
+        elif export_format == 1:
+            df.to_csv(file_name)
+        elif export_format == 2:
+            df.to_string(file_name)
+        elif export_format == 3:
+            df.to_markdown(file_name)
+        elif export_format == 4:
+            df.to_html(file_name)

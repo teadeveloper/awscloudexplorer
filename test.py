@@ -4,6 +4,8 @@ from providers.aws.network import AwsNetwork
 from providers.aws.security import AwsSecurity
 from providers.aws.efs import AwsEfs
 from providers.aws.iam import AwsIam
+from providers.aws.lambdafunc import AwsLambda
+
 import boto3
 import json
 import yaml
@@ -19,15 +21,13 @@ network = AwsNetwork(aws_end_end_point, aws_region)
 security = AwsSecurity(aws_end_end_point, aws_region)
 efs = AwsEfs(aws_end_end_point, aws_region)
 accounts = AwsIam(aws_end_end_point, aws_region)
+lamdafunc = AwsLambda(aws_end_end_point, aws_region)
 
 #results = s3.get_method_results("jky876587", "describe_instance_attribute")
 #results = ec2.get_method_results("i-0cf04fd9d3a5836d3", "describe_instance_status")
 
 #ec2.ec2_export_to("string", "prueba.txt")
 
-print (accounts.get_policies())
-results = accounts.get_policy_yml_properties("arn:aws:iam::aws:policy/aws-service-role/AccessAnalyzerServiceRolePolicy")
-
+results = lamdafunc.get_lambdas()
 print(results)
 
-#print (yaml.dump(results))
