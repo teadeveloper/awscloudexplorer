@@ -28,10 +28,10 @@ class AwsIam:
         accounts = self.iam_client.list_users()["Users"]
 
         for account in accounts:
-            account_data = [account["UserId"], account["UserName"], account["CreateDate"], account["Path"]]
+            account_data = [account["UserName"], account["UserId"],account["CreateDate"], account["Path"]]
             accounts_list.append(account_data)
 
-        accounts_list.insert(0, ["USER ID", "USER NAME", "CREATE DATE", "PATH"])
+        accounts_list.insert(0, ["USER NAME", "USER ID", "CREATE DATE", "PATH"])
         return accounts_list
 
     def get_roles(self):
@@ -47,10 +47,10 @@ class AwsIam:
         """
         role_list = []
         for role in self.iam_client.list_roles()["Roles"]:
-            role_data = [role["RoleId"], role["RoleName"], role["CreateDate"], role["MaxSessionDuration"]]
+            role_data = [role["RoleName"],role["RoleId"], role["CreateDate"], role["MaxSessionDuration"]]
             role_list.append(role_data)
 
-        role_list.insert(0, ["ROLE ID", "ROLE NAME", "CREATE DATE", "SESSION DURATION"])
+        role_list.insert(0, ["ROLE NAME", "ROLE ID", "CREATE DATE", "SESSION DURATION"])
         return role_list
 
     def get_groups(self):
@@ -67,10 +67,10 @@ class AwsIam:
         group_list = []
 
         for group in self.iam_client.list_groups()["Groups"]:
-            group_data = [group["GroupId"], group["GroupName"], group["CreateDate"]]
+            group_data = [group["GroupName"], group["GroupId"], group["CreateDate"]]
             group_list.append(group_data)
 
-        group_list.insert(0, ["GROUP ID", "GROUP NAME", "CREATE DATE"])
+        group_list.insert(0, ["GROUP NAME", "GROUP ID", "CREATE DATE"])
         return group_list
 
     def get_policies(self):
@@ -89,8 +89,104 @@ class AwsIam:
         policies = self.iam_client.list_policies()["Policies"]
 
         for policy in policies:
-            policy_data = [policy["PolicyId"], policy["PolicyName"], policy["CreateDate"]]
+            policy_data = [policy["PolicyName"],policy["PolicyId"], policy["CreateDate"],policy["Arn"]]
             policies_list.append(policy_data)
 
-        policies_list.insert(0, ["GROUP ID", "GROUP NAME", "CREATE DATE"])
+        policies_list.insert(0, ["GROUP NAME", "GROUP ID", "CREATE DATE","ARN"])
         return policies_list
+
+
+    def get_user_yml_properties(self, username):
+
+        """
+        :param username: The name of the user
+        :return: a yml with the user configuration
+        """
+        data = self.iam_client.get_user(UserName=username)
+        results = yaml.dump(data).splitlines()
+        return results
+
+
+    def get_groups_yml_properties(self, groupname):
+
+        """
+        :param groupname: The group name of the group
+        :return: a yml with the user configuration
+        """
+        data = self.iam_client.get_group(GroupName=groupname)
+        results = yaml.dump(data).splitlines()
+        return  results
+
+
+    def get_policy_yml_properties(self, arnname):
+
+        """
+        :param arnname: The group name of the PolicyArn (string)
+        The Amazon Resource Name (ARN) of the managed policy that you want information ab
+
+        :return: a yml with the user configuration
+        """
+        data = self.iam_client.get_policy(PolicyArn=arnname)
+        results = yaml.dump(data).splitlines()
+        return  results
+
+    def get_role_yml_properties(self, rolename):
+
+        """
+        :param rolename: The role name
+
+
+        :return: a yml with the user configuration
+        """
+        data = self.iam_client.get_role(RoleName=rolename)
+        results = yaml.dump(data).splitlines()
+        return  results
+
+    def export_user_yaml(self, username):
+        """
+        Save the Username information to a file
+
+        :param username: The name of the user
+        :return:
+        """
+        data = self.iam_client.get_user(UserName=username)
+        file = open(username + ".yml", "w")
+        yml_data_result = yaml.safe_dump(data, file)
+        file.close()
+
+    def export_policy_yaml(self, arnname,groupname):
+        """
+        Save the policy name information to a file
+
+        :param arnname: The arn string of the policy
+        :param groupname: The name of the group
+        :return:
+        """
+        data = self.iam_client.get_policy(PolicyArn=arnname)
+        file = open(groupname + ".yml", "w")
+        yml_data_result = yaml.safe_dump(data, file)
+        file.close()
+
+    def export_group_yaml(self, groupname):
+        """
+        Save the group name information to a file
+
+        :param username: The name of the group
+        :return:
+        """
+        data = self.iam_client.get_group(GroupName=groupname)
+        file = open(groupname + ".yml", "w")
+        yml_data_result = yaml.safe_dump(data, file)
+        file.close()
+
+    def export_role_yaml(self, rolename):
+        """
+        Save the role name information to a file
+
+        :param username: The name of the role
+        :return:
+        """
+        data = self.iam_client.get_role(RoleName=rolename)
+        file = open(rolename + ".yml", "w")
+        yml_data_result = yaml.safe_dump(data, file)
+        file.close()

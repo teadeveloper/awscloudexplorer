@@ -24,7 +24,10 @@ accounts = AwsIam(aws_end_end_point, aws_region)
 #results = ec2.get_method_results("i-0cf04fd9d3a5836d3", "describe_instance_status")
 
 #ec2.ec2_export_to("string", "prueba.txt")
-results = accounts.get_policies()
+
+print (accounts.get_policies())
+results = accounts.get_policy_yml_properties("arn:aws:iam::aws:policy/aws-service-role/AccessAnalyzerServiceRolePolicy")
+
 print(results)
 
 #print (yaml.dump(results))

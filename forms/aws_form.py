@@ -427,6 +427,31 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
             data_result = self.EFS.get_efs_yml_properties(object_id[0])
             self.tw_information.values = data_result
 
+        elif self.service_selected == "Users":
+            # get the value in row selected
+            object_id = self.tw_aws_grid.entry_widget.selected_row()
+            data_result = self.IAM.get_user_yml_properties(object_id[0])
+            self.tw_information.values = data_result
+
+        elif self.service_selected == "Groups":
+            # get the value in row selected
+            object_id = self.tw_aws_grid.entry_widget.selected_row()
+            data_result = self.IAM.get_groups_yml_properties(object_id[0])
+            self.tw_information.values = data_result
+
+        elif self.service_selected == "Roles":
+            # get the value in row selected
+            object_id = self.tw_aws_grid.entry_widget.selected_row()
+            data_result = self.IAM.get_role_yml_properties(object_id[0])
+            self.tw_information.values = data_result
+
+        elif self.service_selected == "Policies":
+            # get the value in row selected
+            object_id = self.tw_aws_grid.entry_widget.selected_row()
+            data_result = self.IAM.get_policy_yml_properties(object_id[3])
+            self.tw_information.values = data_result
+
+
         self.tw_information.update()
 
     def form_export_to(self):
@@ -558,5 +583,14 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
                 self.ec2.export_ebs_yml(object_id[0])
             elif self.service_selected == "EFS":
                 self.EFS.export_efs_yaml(object_id[0])
-        except:
+            elif self.service_selected == "Users":
+                self.IAM.export_user_yaml(object_id[0])
+            elif self.service_selected == "Groups":
+                self.IAM.export_group_yaml(object_id[0])
+            elif self.service_selected == "Roles":
+                self.IAM.export_role_yaml(object_id[0])
+            elif self.service_selected == "Policies":
+                self.IAM.export_policy_yaml(object_id[3],object_id[0])
+        except Exception as e:
+            print (str(e))
             print("error exporting to yml in GRID")
