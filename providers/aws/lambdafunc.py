@@ -28,8 +28,10 @@ class AwsLambda:
         function_results = self.lambda_client.list_functions()["Functions"]
 
         for function in function_results:
-            functions_data = [function["FunctionName"], function["FunctionArn"],function["Runtime"]]
+            functions_data = [function["FunctionName"], function["FunctionArn"],function["Runtime"],function["CodeSize"],function["Description"]]
             functions.append(functions_data)
+
+        functions.insert(0, ["FUNCTION NAME", "FUNCTION ARN", "RUNTIME", "CODE SIZE", "DESCRIPTION"])
 
         #vpcs_list.insert(0, ["VPC ID", "CDIR BLOCK", "STATE", "DHCP OPTIONS", "TENANCY"])
 

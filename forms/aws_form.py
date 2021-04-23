@@ -32,6 +32,7 @@ from providers.aws.network import AwsNetwork
 from providers.aws.security import AwsSecurity
 from providers.aws.efs import AwsEfs
 from providers.aws.iam import AwsIam
+from providers.aws.lambdafunc import AwsLambda
 
 from functools import partial
 
@@ -85,6 +86,7 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
     Security = AwsSecurity(aws_end_end_point, aws_region)
     EFS = AwsEfs(aws_end_end_point, aws_region)
     IAM = AwsIam(aws_end_end_point, aws_region)
+    LAMBDA = AwsLambda(aws_end_end_point, aws_region)
 
     def create(self):  # override the Form’s create() method, which is called whenever a Form is created
 
@@ -162,6 +164,7 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
                            "Groups",
                            "Roles",
                            "Policies",
+                           "Lambda"
                            ]})
 
         self.tw_aws_grid = self.add(
@@ -276,6 +279,11 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
         elif act_on_this == "Policies":
             self.tw_aws_service.value = 12
             data = self.IAM.get_policies()
+            self.tw_aws_grid.values = data
+
+        elif act_on_this == "Lambda":
+            self.tw_aws_service.value = 13
+            data = self.LAMBDA.get_lambdas()
             self.tw_aws_grid.values = data
 
         self.tw_aws_grid.update(clear=True)

@@ -35,6 +35,7 @@ class AwsS3:
             buckets_list.append(bucket_data)
 
         buckets_list.insert(0,["NAME","CREATION DATE","LOCATION CONSTRAINT"])
+
         return buckets_list
 
     def get_bucket_yml_properties(self, bucket_id):
