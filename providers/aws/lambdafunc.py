@@ -36,3 +36,26 @@ class AwsLambda:
         #vpcs_list.insert(0, ["VPC ID", "CDIR BLOCK", "STATE", "DHCP OPTIONS", "TENANCY"])
 
         return functions
+
+    def get_function_yml_properties(self, functioname):
+
+        """
+        :param functioname: The name of the Lambda function, version, or alias.
+        :return: a yml with the user configuration
+        """
+        data = self.lambda_client.get_function(FunctionName=functioname)
+        results = yaml.dump(data).splitlines()
+        return results
+
+    def export_funcion_yaml(self, functioname):
+        """
+        Save the function information to a file
+
+        :param functioname: The name of the Lambda function, version, or alias.
+        :return: a yml with the user configuration
+        """
+        data = self.lambda_client.get_function(FunctionName=functioname)
+        results = yaml.dump(data).splitlines()
+        file = open(functioname + ".yml", "w")
+        yaml.safe_dump(data, file)
+        file.close()

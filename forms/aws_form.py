@@ -488,6 +488,11 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
             data_result = self.IAM.get_policy_yml_properties(object_id[3])
             self.tw_information.values = data_result
 
+        elif self.service_selected == "Lambda":
+            # get the value in row selected
+            object_id = self.tw_aws_grid.entry_widget.selected_row()
+            data_result = self.LAMBDA.get_function_yml_properties(object_id[0])
+            self.tw_information.values = data_result
 
         self.tw_information.update()
 
@@ -628,6 +633,8 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
                 self.IAM.export_role_yaml(object_id[0])
             elif self.service_selected == "Policies":
                 self.IAM.export_policy_yaml(object_id[3],object_id[0])
+            elif self.service_selected == "Lambda":
+                self.LAMBDA.export_funcion_yaml(object_id[0])
         except Exception as e:
             print (str(e))
             print("error exporting to yml in GRID")
