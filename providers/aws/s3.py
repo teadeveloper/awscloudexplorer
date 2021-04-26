@@ -34,7 +34,8 @@ class AwsS3:
                 Bucket=bucket['Name'])['LocationConstraint']]
             buckets_list.append(bucket_data)
 
-        buckets_list.insert(0,["NAME","CREATION DATE","LOCATION CONSTRAINT"])
+        buckets_list.insert(
+            0, ["NAME", "CREATION DATE", "LOCATION CONSTRAINT"])
 
         return buckets_list
 

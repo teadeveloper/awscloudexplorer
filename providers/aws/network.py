@@ -39,10 +39,12 @@ class AwsNetwork:
         vpcs = self.ec2client.describe_vpcs(Filters=self.vpc_filters)["Vpcs"]
 
         for vpc in vpcs:
-            vpc_data = [vpc["VpcId"], vpc["CidrBlock"], vpc["State"], vpc["DhcpOptionsId"], vpc["InstanceTenancy"]]
+            vpc_data = [vpc["VpcId"], vpc["CidrBlock"], vpc["State"],
+                        vpc["DhcpOptionsId"], vpc["InstanceTenancy"]]
             vpcs_list.append(vpc_data)
 
-        vpcs_list.insert(0,["VPC ID","CDIR BLOCK","STATE","DHCP OPTIONS","TENANCY"])
+        vpcs_list.insert(0, ["VPC ID", "CDIR BLOCK",
+                             "STATE", "DHCP OPTIONS", "TENANCY"])
         return vpcs_list
 
     def get_subnets(self):
@@ -52,14 +54,16 @@ class AwsNetwork:
         """
 
         subnets_list = []
-        subnets = self.ec2client.describe_subnets(Filters=self.subnets_filters)["Subnets"]
+        subnets = self.ec2client.describe_subnets(
+            Filters=self.subnets_filters)["Subnets"]
 
         for subnet in subnets:
-            subnet_data = [subnet["SubnetId"],subnet["CidrBlock"],subnet["AvailableIpAddressCount"],subnet["VpcId"],
-                           subnet["AvailabilityZone"],subnet["AvailabilityZoneId"]]
+            subnet_data = [subnet["SubnetId"], subnet["CidrBlock"], subnet["AvailableIpAddressCount"], subnet["VpcId"],
+                           subnet["AvailabilityZone"], subnet["AvailabilityZoneId"]]
             subnets_list.append(subnet_data)
 
-        subnets_list.insert(0,["SUBNET ID","CDIR BLOCK","AVAILABLE IP","VPC ID","AVAILABLE ZONE","AVAILABLE ZONE ID"])
+        subnets_list.insert(0, ["SUBNET ID", "CDIR BLOCK", "AVAILABLE IP",
+                                "VPC ID", "AVAILABLE ZONE", "AVAILABLE ZONE ID"])
         return subnets_list
 
     def get_acl_network(self):
@@ -68,13 +72,14 @@ class AwsNetwork:
         :return: a list of lists with every VPC config.
         """
         acl_network_list = []
-        acls = self.ec2client.describe_network_acls(Filters=self.acl_network_filters)["NetworkAcls"]
+        acls = self.ec2client.describe_network_acls(
+            Filters=self.acl_network_filters)["NetworkAcls"]
 
         for acl in acls:
-            acl_data = [acl["NetworkAclId"],acl["VpcId"]]
+            acl_data = [acl["NetworkAclId"], acl["VpcId"]]
             acl_network_list.append(acl_data)
 
-        acl_network_list.insert(0,["NETWORK ACL ID","VPC ID"])
+        acl_network_list.insert(0, ["NETWORK ACL ID", "VPC ID"])
         return acl_network_list
 
     def get_network_interfaces(self):
@@ -83,17 +88,19 @@ class AwsNetwork:
         :return: a list of lists with every Network interface config.
         """
         network_interfaces_list = []
-        response_network_interfaces_list = self.ec2client.describe_network_interfaces(Filters=self.network_interfaces_filters)["NetworkInterfaces"]
+        response_network_interfaces_list = self.ec2client.describe_network_interfaces(
+            Filters=self.network_interfaces_filters)["NetworkInterfaces"]
 
         for interface in response_network_interfaces_list:
-            interface_data = [interface["NetworkInterfaceId"],interface["Description"],interface["AvailabilityZone"],interface["MacAddress"],interface["OwnerId"]]
+            interface_data = [interface["NetworkInterfaceId"], interface["Description"],
+                              interface["AvailabilityZone"], interface["MacAddress"], interface["OwnerId"]]
             network_interfaces_list.append(interface_data)
 
-        network_interfaces_list.insert(0,["INTERFACE ID","DESCRIPTION","AVAILABILITY ZONE","MAC ADDRESS","OWNERID"])
+        network_interfaces_list.insert(
+            0, ["INTERFACE ID", "DESCRIPTION", "AVAILABILITY ZONE", "MAC ADDRESS", "OWNERID"])
         return network_interfaces_list
 
     def get_subnet_yml_properties(self, subnet_id):
-
         """
 
         :param subnet_id: The ID of the subnet
@@ -105,7 +112,6 @@ class AwsNetwork:
         return results_subnet
 
     def get_vpc_yml_properties(self, vpc_id):
-
         """
 
         :param vpc_id: The ID of the VPC.
@@ -117,12 +123,12 @@ class AwsNetwork:
         return results_vpc
 
     def get_acl_yml_network_properties(self, acl_id):
-
         """
         :param acl_id: The ID of the ACL.
         :return: a yml with the ACL configuration
         """
-        acl_id_data = self.ec2client.describe_network_acls(NetworkAclIds=[acl_id])
+        acl_id_data = self.ec2client.describe_network_acls(
+            NetworkAclIds=[acl_id])
         results_acl = yaml.dump(acl_id_data).splitlines()
         return results_acl
 
@@ -132,7 +138,8 @@ class AwsNetwork:
         :param interface_id: The ID of the Network interface
         :return: a yml with the Network interface configuration
         """
-        interface_data = self.ec2client.describe_network_interfaces(NetworkInterfaceIds=[interface_id])
+        interface_data = self.ec2client.describe_network_interfaces(
+            NetworkInterfaceIds=[interface_id])
         results_interface = yaml.dump(interface_data).splitlines()
         return results_interface
 
@@ -155,7 +162,8 @@ class AwsNetwork:
         :param vpc_id: id of the Network interface
         :return:
         """
-        interface_data = self.ec2client.describe_network_interfaces(NetworkInterfaceIds=[interface_id])
+        interface_data = self.ec2client.describe_network_interfaces(
+            NetworkInterfaceIds=[interface_id])
         file = open(interface_id + ".yml", "w")
         yaml.safe_dump(interface_data, file)
         file.close()
@@ -180,7 +188,8 @@ class AwsNetwork:
         :param acl_id: Name of the bucket
         :return:
         """
-        acl_id_data = self.ec2client.describe_network_acls(NetworkAclIds=[acl_id])
+        acl_id_data = self.ec2client.describe_network_acls(
+            NetworkAclIds=[acl_id])
         results_acl = yaml.dump(acl_id_data).splitlines()
         file = open(acl_id + ".yml", "w")
         yaml.safe_dump(acl_id_data, file)

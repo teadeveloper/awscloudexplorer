@@ -58,7 +58,8 @@ class AwsEc2:
             ec2_instance.append(instance.state["Name"])
             ec2_instances.append(ec2_instance)
 
-        ec2_instances.insert(0,["NAME","ID","TYPE","PUBLIC IP","PRIVATE IP","IMAGE ID","STATE"])
+        ec2_instances.insert(
+            0, ["NAME", "ID", "TYPE", "PUBLIC IP", "PRIVATE IP", "IMAGE ID", "STATE"])
         return ec2_instances
 
     def get_ebs(self):
@@ -67,14 +68,17 @@ class AwsEc2:
 
         :return: List of lists
         """
-        response_ebs_list = self.ec2client.describe_volumes(Filters=self.ebs_filters)["Volumes"]
+        response_ebs_list = self.ec2client.describe_volumes(
+            Filters=self.ebs_filters)["Volumes"]
         ebs_volumes = []
 
         for ebs in response_ebs_list:
-            ebs_data = [ebs["VolumeId"], ebs["Size"], ebs["VolumeType"], ebs["Iops"], ebs["Encrypted"]]
+            ebs_data = [ebs["VolumeId"], ebs["Size"],
+                        ebs["VolumeType"], ebs["Iops"], ebs["Encrypted"]]
             ebs_volumes.append((ebs_data))
 
-        ebs_volumes.insert(0,["VOLUME ID","SIZE","TYPE","IOPS","ENCRYPTED"])
+        ebs_volumes.insert(
+            0, ["VOLUME ID", "SIZE", "TYPE", "IOPS", "ENCRYPTED"])
         return ebs_volumes
 
     def get_ebs_yml_properties(self, ebs_id):
@@ -162,7 +166,6 @@ class AwsEc2:
         self.data_to_file(ec2_instances, export_format, file_name)
 
     def data_to_file(self, data, export_format, file_name):
-
         """
         Convert de data to a pandas data frame and save it to a file.
 
@@ -250,7 +253,6 @@ class AwsEc2:
         file.close()
 
     def export_ebs_to(self, export_format, file_name):
-
         """Convert all EBS  in a AWS  to a excel, csv, readme, or html
 
                 * export_format: html,string,csv, excel or markdown

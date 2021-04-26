@@ -1,5 +1,9 @@
+#!/usr/bin/python
 import npyscreen
 from forms import aws_form
+
+import curses
+
 
 class App(npyscreen.NPSAppManaged):
 
@@ -9,6 +13,10 @@ class App(npyscreen.NPSAppManaged):
         self.CloudForm = self.addForm(
             'MAIN', aws_form.AwsMeanForm, name="AWS Cloud Explorer")
 
+
 if (__name__ == "__main__"):
 
     CloudExplorer = App().run()
+
+
+

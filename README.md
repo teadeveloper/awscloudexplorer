@@ -1,83 +1,130 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/teadeveloper/awscloudexplorer/badge?s=e65ddad85c3e993c6ec4a68e3fe046d32e67e472)](https://www.codefactor.io/repository/github/teadeveloper/awscloudexplorer)
 
+
 <p align="center">
 <img src="images/logo.png" width="750" height="250">
 </p> 
 
+[![asciicast](https://asciinema.org/a/1IkBGa3DB0xKuhCmWtOjeoYSx.svg)](https://asciinema.org/a/1IkBGa3DB0xKuhCmWtOjeoYSx)
+
 
 ### About The Project & Motivation
 
-Cloud Explorer is a tool to explore the resources in AWS Cloud using a TUI (terminal user interface) instead a GUI or AWS web console, Inspired in legacy tools like Norton Commander.
+Cloud Explorer is a tool for TUI lovers to explore the resources in AWS Cloud using a TUI (terminal user interface) instead a GUI or AWS web console, 
+Inspired in legacy tools like Norton Commander,  who was programming in the 80s or 90s are going to have a TUI experience using the
+last technology in cloud.
 
-Main features:
+This the first MVP of Cloud Explorer, a lot of things to be improved, new features etc.. This MVP is stable and you can use in 
+your daily activities as a SysDev os SysAdmin.
 
-TUI:
+**Main features:**
 
-* Explore the resources' quickly from your terminal in Linux, Mac or Windows (CMD & WLS) using your console accounts or programmatic accounts.:relieved:
+**TUI:**
+
+* Explore the AWS resources quickly from your terminal in Linux, Mac or Windows (CMD & WLS) using your console accounts or programmatic accounts.
 * Get quickly the resource configuration.
+* EC2 instances could be exported using customs keys.
 * Support filters (if supported by AWS API).
-* Export the configuration of a resource to YML.
+* Export the configuration of a resource to YML. For example, save ec2 instance config to a yml.
 * Export all resources VPCs, EC2s, Buckets etc. to YML, Excel, CSV, Markdown, HTML and String.
 
-Dashboard:
- 
-Of course, no one template will serve all projects since your needs may be different. So I'll be adding more in the near future. You may also suggest changes by forking this repo and creating a pull request or opening an issue. Thanks to all the people have have contributed to expanding this template!
+** AWS Services currently supported: **
 
-A list of commonly used resources that I find helpful are listed in the acknowledgements.
+- EC2
+- VPC
+- Subnets
+- ACL Network
+- Security groups
+- Network Interfaces
+- Buckets
+- EBS
+- EFS
+- IAM
+    - Users
+    - Groups
+    - Roles
+    - Policies
+    
+* Lambda functions
 
-### Built With
+**Pipeline Integration:**
 
-This section should list any major frameworks that you built your project using. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
-* [Bootstrap](https://getbootstrap.com)
-* [JQuery](https://jquery.com)
-* [Laravel](https://laravel.com)
-
-
+If cloud explorer runs in some sort of automation (Jenkins, Rundeck, Git Hub actions etc.) there is a command to
+export AWS services to a YML,Excel, CSV, Markdown, HTML and String.
+  
 
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+Cloud Explorer is written in Python, and it works in Python 3.x and the current tests are running using Python 3.8.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+1) Your terminal Width must be **140** otherwise you got this error:
+
+```shell
+.NotEnoughSpaceForWidget: Not enough space: max y and x = 58 , 117. Height and Width = 18 
+```
+To fix it, you have to resize your terminal in Linux, OSX or windows using your mouse :unamused:
+
+2) Set your AWS credentials:
+
+```shell
+export AWS_ACCESS_KEY_ID="XXXXXXXXX"
+export AWS_SECRET_ACCESS_KEY="XXXXXXXXX"
+export AWS_SESSION_TOKEN="XXXXXXXXX"
+```
 
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
-   ```sh
-   git clone https://github.com/your_username_/Project-Name.git
-   ```
-3. Install NPM packages
-   ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```JS
-   const API_KEY = 'ENTER YOUR API';
-   ```
+Using virtual environment:
 
-
+```shell
+# clone the repo
+git clone https://github.com/teadeveloper/awscloudexplorer.git
+cd awscloudexplorer/
+# Create virtual environment
+python3 -m venv ./venv && source venv/bin/activate
+# Install pre-reqs for 
+pip install -r requirements.txt
+#Run cloud explorer
+python cloudexplorer.py
+```
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+** Pipeline Mode **
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+Find the python called exportall.py to export from command line or in a pipeline the AWS services to a file.
 
+1. To export all ec2 instances to a excel file with all keys:
+
+ ```shell
+python exportall.py --ec2_all_keys --filename="ec2_all_keys.csv" --format=0
+ ```
+2. To export all ec2 instances to an excel file with basic keys:
+```shell
+Shellpython exportall.py --ec2ins --filename="ec2.csv" --format=0
+```
+3. To export all users to CSV:
+```shell
+python exportall.py --user --filename="users.csv" --format=1
+```
+   
+4. To export all policies to HTML:
+
+```shell
+python exportall.py --policy --filename="policies.csv" --format=4
+```
 
 <!-- ROADMAP -->
 ## Roadmap
 
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a list of proposed features (and known issues).
+Currently, I am working to improve the Python code to optimize it and also:
 
+* Add pytest/testinfra to automatize tests.
+* Add test to check the app works fine in several Python versions.
+* Support new AWS services.
 
 <!-- CONTRIBUTING -->
 ## Contributing
@@ -95,6 +142,10 @@ Contributions are what make the open source community such an amazing place to b
 
 Distributed under Open Source (GPL-3.0)
 
+<h3 align="left">Support:</h3>
+<p><a href="https://www.buymeacoffee.com/teadeveloper"> <img align="left" src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" height="50" width="210" alt="teadeveloper" /></a></p><br><br>
+
+
 ## If you like it & Feedback
 
 Feel free to send me an email with your feedback or open an issue. Feature requests are always welcome.
@@ -108,9 +159,6 @@ Please consider supporting it by buying me a tea or a coffee , so I can dedicate
 
 Teadeveloper
 :email: teadeveloper75@gmail.com
-
-
-
 
 
 

@@ -28,10 +28,12 @@ class AwsIam:
         accounts = self.iam_client.list_users()["Users"]
 
         for account in accounts:
-            account_data = [account["UserName"], account["UserId"],account["CreateDate"], account["Path"]]
+            account_data = [account["UserName"], account["UserId"],
+                            account["CreateDate"], account["Path"]]
             accounts_list.append(account_data)
 
-        accounts_list.insert(0, ["USER NAME", "USER ID", "CREATE DATE", "PATH"])
+        accounts_list.insert(
+            0, ["USER NAME", "USER ID", "CREATE DATE", "PATH"])
         return accounts_list
 
     def get_roles(self):
@@ -47,10 +49,12 @@ class AwsIam:
         """
         role_list = []
         for role in self.iam_client.list_roles()["Roles"]:
-            role_data = [role["RoleName"],role["RoleId"], role["CreateDate"], role["MaxSessionDuration"]]
+            role_data = [role["RoleName"], role["RoleId"],
+                         role["CreateDate"], role["MaxSessionDuration"]]
             role_list.append(role_data)
 
-        role_list.insert(0, ["ROLE NAME", "ROLE ID", "CREATE DATE", "SESSION DURATION"])
+        role_list.insert(0, ["ROLE NAME", "ROLE ID",
+                             "CREATE DATE", "SESSION DURATION"])
         return role_list
 
     def get_groups(self):
@@ -67,7 +71,8 @@ class AwsIam:
         group_list = []
 
         for group in self.iam_client.list_groups()["Groups"]:
-            group_data = [group["GroupName"], group["GroupId"], group["CreateDate"]]
+            group_data = [group["GroupName"],
+                          group["GroupId"], group["CreateDate"]]
             group_list.append(group_data)
 
         group_list.insert(0, ["GROUP NAME", "GROUP ID", "CREATE DATE"])
@@ -89,15 +94,15 @@ class AwsIam:
         policies = self.iam_client.list_policies()["Policies"]
 
         for policy in policies:
-            policy_data = [policy["PolicyName"],policy["PolicyId"], policy["CreateDate"],policy["Arn"]]
+            policy_data = [policy["PolicyName"], policy["PolicyId"],
+                           policy["CreateDate"], policy["Arn"]]
             policies_list.append(policy_data)
 
-        policies_list.insert(0, ["GROUP NAME", "GROUP ID", "CREATE DATE","ARN"])
+        policies_list.insert(
+            0, ["GROUP NAME", "GROUP ID", "CREATE DATE", "ARN"])
         return policies_list
 
-
     def get_user_yml_properties(self, username):
-
         """
         :param username: The name of the user
         :return: a yml with the user configuration
@@ -106,20 +111,16 @@ class AwsIam:
         results = yaml.dump(data).splitlines()
         return results
 
-
     def get_groups_yml_properties(self, groupname):
-
         """
         :param groupname: The group name of the group
         :return: a yml with the user configuration
         """
         data = self.iam_client.get_group(GroupName=groupname)
         results = yaml.dump(data).splitlines()
-        return  results
-
+        return results
 
     def get_policy_yml_properties(self, arnname):
-
         """
         :param arnname: The group name of the PolicyArn (string)
         The Amazon Resource Name (ARN) of the managed policy that you want information ab
@@ -128,10 +129,9 @@ class AwsIam:
         """
         data = self.iam_client.get_policy(PolicyArn=arnname)
         results = yaml.dump(data).splitlines()
-        return  results
+        return results
 
     def get_role_yml_properties(self, rolename):
-
         """
         :param rolename: The role name
 
@@ -140,7 +140,7 @@ class AwsIam:
         """
         data = self.iam_client.get_role(RoleName=rolename)
         results = yaml.dump(data).splitlines()
-        return  results
+        return results
 
     def export_user_yaml(self, username):
         """
@@ -154,7 +154,7 @@ class AwsIam:
         yml_data_result = yaml.safe_dump(data, file)
         file.close()
 
-    def export_policy_yaml(self, arnname,groupname):
+    def export_policy_yaml(self, arnname, groupname):
         """
         Save the policy name information to a file
 
@@ -211,10 +211,10 @@ class AwsIam:
         df = pd.DataFrame(users)
 
         if export_format == 0:
-           excel_writer = pd.ExcelWriter(file_name, engine='xlsxwriter')
-           df.to_excel(
+            excel_writer = pd.ExcelWriter(file_name, engine='xlsxwriter')
+            df.to_excel(
                 excel_writer, sheet_name='EFS', index=False)
-           excel_writer.save()
+            excel_writer.save()
         elif export_format == 1:
             df.to_csv(file_name)
         elif export_format == 2:
@@ -244,10 +244,10 @@ class AwsIam:
         df = pd.DataFrame(groups)
 
         if export_format == 0:
-           excel_writer = pd.ExcelWriter(file_name, engine='xlsxwriter')
-           df.to_excel(
+            excel_writer = pd.ExcelWriter(file_name, engine='xlsxwriter')
+            df.to_excel(
                 excel_writer, sheet_name='EFS', index=False)
-           excel_writer.save()
+            excel_writer.save()
         elif export_format == 1:
             df.to_csv(file_name)
         elif export_format == 2:
@@ -277,10 +277,10 @@ class AwsIam:
         df = pd.DataFrame(roles)
 
         if export_format == 0:
-           excel_writer = pd.ExcelWriter(file_name, engine='xlsxwriter')
-           df.to_excel(
+            excel_writer = pd.ExcelWriter(file_name, engine='xlsxwriter')
+            df.to_excel(
                 excel_writer, sheet_name='EFS', index=False)
-           excel_writer.save()
+            excel_writer.save()
         elif export_format == 1:
             df.to_csv(file_name)
         elif export_format == 2:
@@ -310,10 +310,10 @@ class AwsIam:
         df = pd.DataFrame(policy)
 
         if export_format == 0:
-           excel_writer = pd.ExcelWriter(file_name, engine='xlsxwriter')
-           df.to_excel(
+            excel_writer = pd.ExcelWriter(file_name, engine='xlsxwriter')
+            df.to_excel(
                 excel_writer, sheet_name='EFS', index=False)
-           excel_writer.save()
+            excel_writer.save()
         elif export_format == 1:
             df.to_csv(file_name)
         elif export_format == 2:

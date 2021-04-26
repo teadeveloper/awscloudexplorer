@@ -9,6 +9,7 @@ terraform/
 
 temporal.txt
 test.py
+test.sh
 type_filename.ext
 
 ### Python ###

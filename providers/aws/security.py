@@ -7,6 +7,8 @@ This file contains the classes and methods to get information about Security.
 import boto3
 import yaml
 import pandas as pd
+
+
 class AwsSecurity:
 
     def __init__(self, aws_end_point, aws_region):
@@ -30,11 +32,13 @@ class AwsSecurity:
         """
         security_group_list = []
 
-        security_groups = self.ec2client.describe_security_groups(Filters=self.security_groups_filters)["SecurityGroups"]
+        security_groups = self.ec2client.describe_security_groups(
+            Filters=self.security_groups_filters)["SecurityGroups"]
 
         for security_group in security_groups:
 
-            security_group_data = [security_group["GroupId"],security_group["Description"],security_group["OwnerId"]]
+            security_group_data = [security_group["GroupId"],
+                                   security_group["Description"], security_group["OwnerId"]]
             security_group_list.append(security_group_data)
 
         return security_group_list
@@ -51,8 +55,10 @@ class AwsSecurity:
         JSON results from AWS
 
         """
-        security_group_data = self.ec2client.describe_security_groups(GroupIds=[security_group_id])
-        results_security_group_data = yaml.safe_dump(security_group_data).splitlines()
+        security_group_data = self.ec2client.describe_security_groups(
+            GroupIds=[security_group_id])
+        results_security_group_data = yaml.safe_dump(
+            security_group_data).splitlines()
         return results_security_group_data
 
     def export_security_group_yaml(self, security_group_id):
@@ -62,7 +68,8 @@ class AwsSecurity:
         :param bucket_id: Name of the bucket
         :return:
         """
-        security_group_data = self.ec2client.describe_security_groups(GroupIds=[security_group_id])
+        security_group_data = self.ec2client.describe_security_groups(
+            GroupIds=[security_group_id])
         file = open(security_group_id + ".yml", "w")
         yml_data_result = yaml.safe_dump(security_group_data, file)
         file.close()

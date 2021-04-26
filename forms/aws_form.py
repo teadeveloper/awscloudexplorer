@@ -17,7 +17,6 @@ This file contains the following classes & methods:
 * AwsMeanForm - A FormBaseNew that contains all the widgets to create the MAIN form.
 * SELECT_REGION - A popup form to select the AWS region.
 
-
 """
 
 import curses
@@ -47,7 +46,8 @@ class AwsTableWidget(npyscreen.SimpleGrid):
 
 class AwsServiceWidget(npyscreen.MultiLineAction):
     def actionHighlighted(self, act_on_this, keypress):
-        self.parent.parentApp.getForm('MAIN').act_service_selected_action(act_on_this)
+        self.parent.parentApp.getForm(
+            'MAIN').act_service_selected_action(act_on_this)
 
 
 class AwsInformationWidget(npyscreen.MultiLine):
@@ -96,6 +96,7 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
         self.aws_network_menu = self.add_menu(name="Network")
         self.aws_security_menu = self.add_menu(name="Security")
         self.aws_iam_menu = self.add_menu(name="IAM")
+        self.aws_lambda_menu = self.add_menu(name="Lambda Functions")
 
         self.aws_ec2_menu.addItemsFromList([
             ("Export instances", self.ec2_export_to),
@@ -119,6 +120,10 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
             ("Export Security Groups", self.security_group_export_to),
         ])
 
+        self.aws_lambda_menu.addItemsFromList([
+            ("Export Lambda functions", self.lambda_functions_export_to),
+        ])
+
         self.aws_iam_menu.addItemsFromList([
             ("Export Users", self.users_export_to),
             ("Export Groups", self.groups_export_to),
@@ -133,7 +138,7 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
             rely=self.configuration["tw_region_rely"],
             width=self.configuration["tw_region_width"],
             height=self.configuration["tw_region_height"],
-            scroll_exit=True,
+            scroll_exit=False,
             contained_widget_arguments={
                 # 'color': "WARNING",
                 # 'widgets_inherit_color': True,
@@ -174,6 +179,7 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
             height=self.configuration["tw_grid_height"],
             width=self.configuration["tw_grid_width"],
             name="Select Service in the left menu",
+            scroll_exit=False,
             contained_widget_arguments={
                 # 'color': "DEFAULT",
                 # 'widgets_inherit_color': True,
@@ -188,8 +194,7 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
             relx=self.configuration["tw_information_relx"],
             rely=self.configuration["tw_information_rely"],
             width=self.configuration["tw_information_width"],
-
-            scroll_exit=True,
+            scroll_exit=False,
             contained_widget_arguments={
                 # 'color': "WARNING",
                 # 'widgets_inherit_color': True,
@@ -203,7 +208,6 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
             {curses.ascii.NL: self.act_on_enter_in_grid_widget})
         self.tw_aws_grid.add_handlers({"^E": self.export_selected_row_grid})
         self.tw_aws_grid.add_handlers({"^F": self.form_custom_filter})
-
         self.tw_aws_service.value = 0
 
     def act_service_selected_action(self, act_on_this):
@@ -311,14 +315,16 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
             npyscreen.notify_wait("Working...", form_color='GOOD')
 
         user_options_chosen = self.form_export_to()
-        self.Network.export_vpc_to(user_options_chosen[0], user_options_chosen[1])
+        self.Network.export_vpc_to(
+            user_options_chosen[0], user_options_chosen[1])
 
     def network_interfaces_export_to(self):
         def info_message():
             npyscreen.notify_wait("Working...", form_color='GOOD')
 
         user_options_chosen = self.form_export_to()
-        self.Network.export_network_interfaces_to(user_options_chosen[0], user_options_chosen[1])
+        self.Network.export_network_interfaces_to(
+            user_options_chosen[0], user_options_chosen[1])
 
     def security_group_export_to(self):
 
@@ -334,7 +340,8 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
             npyscreen.notify_wait("Working...", form_color='GOOD')
 
         user_options_chosen = self.form_export_to()
-        self.Network.export_subnet_to(user_options_chosen[0], user_options_chosen[1])
+        self.Network.export_subnet_to(
+            user_options_chosen[0], user_options_chosen[1])
 
     def ebs_export_to(self):
 
@@ -358,7 +365,8 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
             npyscreen.notify_wait("Working...", form_color='GOOD')
 
         user_options_chosen = self.form_export_to()
-        self.Network.export_acl_to(user_options_chosen[0], user_options_chosen[1])
+        self.Network.export_acl_to(
+            user_options_chosen[0], user_options_chosen[1])
 
     def ec2_all_keys_export_to(self):
 
@@ -367,28 +375,43 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
 
         user_options_chosen = self.form_export_to()
         info_message()
-        self.ec2.all_keys_export_to(user_options_chosen[0], user_options_chosen[1])
+        self.ec2.all_keys_export_to(
+            user_options_chosen[0], user_options_chosen[1])
 
     def users_export_to(self):
         def info_message():
             npyscreen.notify_wait("Working...", form_color='GOOD')
         user_options_chosen = self.form_export_to()
-        self.IAM.users_export_to(user_options_chosen[0], user_options_chosen[1])
+        self.IAM.users_export_to(
+            user_options_chosen[0], user_options_chosen[1])
+
     def groups_export_to(self):
         def info_message():
             npyscreen.notify_wait("Working...", form_color='GOOD')
         user_options_chosen = self.form_export_to()
-        self.IAM.groups_export_to(user_options_chosen[0], user_options_chosen[1])
+        self.IAM.groups_export_to(
+            user_options_chosen[0], user_options_chosen[1])
+
     def roles_export_to(self):
         def info_message():
             npyscreen.notify_wait("Working...", form_color='GOOD')
         user_options_chosen = self.form_export_to()
-        self.IAM.roles_export_to(user_options_chosen[0], user_options_chosen[1])
+        self.IAM.roles_export_to(
+            user_options_chosen[0], user_options_chosen[1])
+
     def policies_export_to(self):
         def info_message():
             npyscreen.notify_wait("Working...", form_color='GOOD')
         user_options_chosen = self.form_export_to()
-        self.IAM.policies_export_to(user_options_chosen[0], user_options_chosen[1])
+        self.IAM.policies_export_to(
+            user_options_chosen[0], user_options_chosen[1])
+
+    def lambda_functions_export_to(self):
+        def info_message():
+            npyscreen.notify_wait("Working...", form_color='GOOD')
+        user_options_chosen = self.form_export_to()
+        self.LAMBDA.funcion_yaml_export_to(
+            user_options_chosen[0], user_options_chosen[1])
 
     def update_data_widgets(self):
 
@@ -407,92 +430,101 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
 
         """
 
-        npyscreen.notify("Reading Information for" + self.service_selected,
+        npyscreen.notify("Reading Information for " + self.service_selected,
                          title="Information")
-        if self.service_selected == "EC2":
-            # get the value in row selected
-            ec2id = self.tw_aws_grid.entry_widget.selected_row()
-            ec2_instance_result = self.ec2.get_ec2_yml_properties(ec2id[1])
-            self.tw_information.values = ec2_instance_result
 
+        try:
 
-        elif self.service_selected == "Buckets":
-            # get the value in row selected
-            bucket_id = self.tw_aws_grid.entry_widget.selected_row()
-            bucket_objects_result = self.s3.get_bucket_yml_properties(bucket_id[0])
-            self.tw_information.values = bucket_objects_result
+            if self.service_selected == "EC2":
+                # get the value in row selected
+                ec2id = self.tw_aws_grid.entry_widget.selected_row()
+                ec2_instance_result = self.ec2.get_ec2_yml_properties(ec2id[1])
+                self.tw_information.values = ec2_instance_result
 
-        elif self.service_selected == "VPC":
-            # get the value in row selected
-            vpc_id = self.tw_aws_grid.entry_widget.selected_row()
-            vpc_config_result = self.Network.get_vpc_yml_properties(vpc_id[0])
-            self.tw_information.values = vpc_config_result
+            elif self.service_selected == "Buckets":
+                # get the value in row selected
+                bucket_id = self.tw_aws_grid.entry_widget.selected_row()
+                bucket_objects_result = self.s3.get_bucket_yml_properties(
+                    bucket_id[0])
+                self.tw_information.values = bucket_objects_result
 
-        elif self.service_selected == "Subnets":
-            # get the value in row selected
-            subnet_id = self.tw_aws_grid.entry_widget.selected_row()
-            subnet_config_result = self.Network.get_subnet_yml_properties(subnet_id[0])
-            self.tw_information.values = subnet_config_result
+            elif self.service_selected == "VPC":
+                # get the value in row selected
+                vpc_id = self.tw_aws_grid.entry_widget.selected_row()
+                vpc_config_result = self.Network.get_vpc_yml_properties(vpc_id[0])
+                self.tw_information.values = vpc_config_result
 
-        elif self.service_selected == "ACLs Network":
-            # get the value in row selected
-            acl_id = self.tw_aws_grid.entry_widget.selected_row()
-            subnet_config_result = self.Network.get_acl_yml_network_properties(acl_id[0])
-            self.tw_information.values = subnet_config_result
+            elif self.service_selected == "Subnets":
+                # get the value in row selected
+                subnet_id = self.tw_aws_grid.entry_widget.selected_row()
+                subnet_config_result = self.Network.get_subnet_yml_properties(
+                    subnet_id[0])
+                self.tw_information.values = subnet_config_result
 
-        elif self.service_selected == "Security Groups":
-            # get the value in row selected
-            security_group_id = self.tw_aws_grid.entry_widget.selected_row()
-            security_group_result = self.Security.get_security_groups_yml_properties(security_group_id[0])
-            self.tw_information.values = security_group_result
+            elif self.service_selected == "ACLs Network":
+                # get the value in row selected
+                acl_id = self.tw_aws_grid.entry_widget.selected_row()
+                subnet_config_result = self.Network.get_acl_yml_network_properties(
+                    acl_id[0])
+                self.tw_information.values = subnet_config_result
 
-        elif self.service_selected == "Network interfaces":
-            # get the value in row selected
-            object_id = self.tw_aws_grid.entry_widget.selected_row()
-            data_result = self.Network.get_network_interface_properties(object_id[0])
-            self.tw_information.values = data_result
+            elif self.service_selected == "Security Groups":
+                # get the value in row selected
+                security_group_id = self.tw_aws_grid.entry_widget.selected_row()
+                security_group_result = self.Security.get_security_groups_yml_properties(
+                    security_group_id[0])
+                self.tw_information.values = security_group_result
 
-        elif self.service_selected == "EBS":
-            # get the value in row selected
-            object_id = self.tw_aws_grid.entry_widget.selected_row()
-            data_result = self.ec2.get_ebs_yml_properties(object_id[0])
-            self.tw_information.values = data_result
+            elif self.service_selected == "Network interfaces":
+                # get the value in row selected
+                object_id = self.tw_aws_grid.entry_widget.selected_row()
+                data_result = self.Network.get_network_interface_properties(
+                    object_id[0])
+                self.tw_information.values = data_result
 
-        elif self.service_selected == "EFS":
-            # get the value in row selected
-            object_id = self.tw_aws_grid.entry_widget.selected_row()
-            data_result = self.EFS.get_efs_yml_properties(object_id[0])
-            self.tw_information.values = data_result
+            elif self.service_selected == "EBS":
+                # get the value in row selected
+                object_id = self.tw_aws_grid.entry_widget.selected_row()
+                data_result = self.ec2.get_ebs_yml_properties(object_id[0])
+                self.tw_information.values = data_result
 
-        elif self.service_selected == "Users":
-            # get the value in row selected
-            object_id = self.tw_aws_grid.entry_widget.selected_row()
-            data_result = self.IAM.get_user_yml_properties(object_id[0])
-            self.tw_information.values = data_result
+            elif self.service_selected == "EFS":
+                # get the value in row selected
+                object_id = self.tw_aws_grid.entry_widget.selected_row()
+                data_result = self.EFS.get_efs_yml_properties(object_id[0])
+                self.tw_information.values = data_result
 
-        elif self.service_selected == "Groups":
-            # get the value in row selected
-            object_id = self.tw_aws_grid.entry_widget.selected_row()
-            data_result = self.IAM.get_groups_yml_properties(object_id[0])
-            self.tw_information.values = data_result
+            elif self.service_selected == "Users":
+                # get the value in row selected
+                object_id = self.tw_aws_grid.entry_widget.selected_row()
+                data_result = self.IAM.get_user_yml_properties(object_id[0])
+                self.tw_information.values = data_result
 
-        elif self.service_selected == "Roles":
-            # get the value in row selected
-            object_id = self.tw_aws_grid.entry_widget.selected_row()
-            data_result = self.IAM.get_role_yml_properties(object_id[0])
-            self.tw_information.values = data_result
+            elif self.service_selected == "Groups":
+                # get the value in row selected
+                object_id = self.tw_aws_grid.entry_widget.selected_row()
+                data_result = self.IAM.get_groups_yml_properties(object_id[0])
+                self.tw_information.values = data_result
 
-        elif self.service_selected == "Policies":
-            # get the value in row selected
-            object_id = self.tw_aws_grid.entry_widget.selected_row()
-            data_result = self.IAM.get_policy_yml_properties(object_id[3])
-            self.tw_information.values = data_result
+            elif self.service_selected == "Roles":
+                # get the value in row selected
+                object_id = self.tw_aws_grid.entry_widget.selected_row()
+                data_result = self.IAM.get_role_yml_properties(object_id[0])
+                self.tw_information.values = data_result
 
-        elif self.service_selected == "Lambda":
-            # get the value in row selected
-            object_id = self.tw_aws_grid.entry_widget.selected_row()
-            data_result = self.LAMBDA.get_function_yml_properties(object_id[0])
-            self.tw_information.values = data_result
+            elif self.service_selected == "Policies":
+                # get the value in row selected
+                object_id = self.tw_aws_grid.entry_widget.selected_row()
+                data_result = self.IAM.get_policy_yml_properties(object_id[3])
+                self.tw_information.values = data_result
+
+            elif self.service_selected == "Lambda":
+                # get the value in row selected
+                object_id = self.tw_aws_grid.entry_widget.selected_row()
+                data_result = self.LAMBDA.get_function_yml_properties(object_id[0])
+                self.tw_information.values = data_result
+        except:
+            pass
 
         self.tw_information.update()
 
@@ -604,7 +636,8 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
         """
 
         object_id = self.tw_aws_grid.entry_widget.selected_row()
-        npyscreen.notify("Exporting data to " + object_id[0] + ".yml", title="Information")
+        npyscreen.notify("Exporting data to " +
+                         object_id[0] + ".yml", title="Information")
 
         try:
             if self.service_selected == "EC2":
@@ -632,9 +665,9 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
             elif self.service_selected == "Roles":
                 self.IAM.export_role_yaml(object_id[0])
             elif self.service_selected == "Policies":
-                self.IAM.export_policy_yaml(object_id[3],object_id[0])
+                self.IAM.export_policy_yaml(object_id[3], object_id[0])
             elif self.service_selected == "Lambda":
                 self.LAMBDA.export_funcion_yaml(object_id[0])
         except Exception as e:
-            print (str(e))
+            print(str(e))
             print("error exporting to yml in GRID")

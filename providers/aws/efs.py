@@ -3,6 +3,7 @@ import yaml
 import pandas as pd
 from hurry.filesize import size
 
+
 class AwsEfs:
 
     def __init__(self, aws_end_point, aws_region):
@@ -28,10 +29,12 @@ class AwsEfs:
 
         for efs in self.efs_client.describe_file_systems()["FileSystems"]:
             size = efs["SizeInBytes"]["Value"]
-            efs_data = [efs["FileSystemId"],size, efs["CreationTime"],efs["Encrypted"],efs["NumberOfMountTargets"],efs["ThroughputMode"]]
+            efs_data = [efs["FileSystemId"], size, efs["CreationTime"],
+                        efs["Encrypted"], efs["NumberOfMountTargets"], efs["ThroughputMode"]]
             efs_list.append((efs_data))
 
-        efs_list.insert(0,["FILESYSTEM ID","SIZE","CREATION TIME","ENCRYPTED","NUMBER MOUNT TARGETS","THROUGH PUT MODE"])
+        efs_list.insert(0, ["FILESYSTEM ID", "SIZE", "CREATION TIME",
+                            "ENCRYPTED", "NUMBER MOUNT TARGETS", "THROUGH PUT MODE"])
         return efs_list
 
     def get_efs_yml_properties(self, efs_id):
@@ -47,7 +50,8 @@ class AwsEfs:
 
         """
         try:
-            efs_data = self.efs_client.describe_file_systems(FileSystemId=efs_id)
+            efs_data = self.efs_client.describe_file_systems(
+                FileSystemId=efs_id)
             results_efs_data = yaml.safe_dump(efs_data).splitlines()
             return results_efs_data
         except:
@@ -60,7 +64,8 @@ class AwsEfs:
         :param efs_id: Name of the efs_id
         :return:
         """
-        bucket_data = self.efs_client.describe_file_systems(FileSystemId=efs_id)
+        bucket_data = self.efs_client.describe_file_systems(
+            FileSystemId=efs_id)
         file = open(efs_id + ".yml", "w")
         yml_data_result = yaml.safe_dump(bucket_data, file)
         file.close()
@@ -84,7 +89,7 @@ class AwsEfs:
         for efs in aws_response:
             efs_fs.append(efs)
 
-        df_efs= pd.DataFrame(efs_fs)
+        df_efs = pd.DataFrame(efs_fs)
 
         if export_format == 0:
             excel_writer = pd.ExcelWriter(file_name, engine='xlsxwriter')
@@ -99,5 +104,3 @@ class AwsEfs:
             df_efs.to_markdown(file_name)
         elif export_format == 4:
             df_efs.to_html(file_name)
-
-
