@@ -28,7 +28,7 @@ your daily activities as a SysDev os SysAdmin.
 * Export the configuration of a resource to YML. For example, save ec2 instance config to a yml.
 * Export all resources VPCs, EC2s, Buckets etc. to YML, Excel, CSV, Markdown, HTML and String.
 
-** AWS Services currently supported: **
+**AWS Services currently supported:**
 
 - EC2
 - VPC
