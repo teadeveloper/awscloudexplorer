@@ -194,7 +194,9 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
             relx=self.configuration["tw_information_relx"],
             rely=self.configuration["tw_information_rely"],
             width=self.configuration["tw_information_width"],
-            scroll_exit=False,
+            scroll_exit=True,
+            exit_left = True,
+            exit_right = True,
             contained_widget_arguments={
                 # 'color': "WARNING",
                 # 'widgets_inherit_color': True,
