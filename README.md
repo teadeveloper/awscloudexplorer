@@ -93,11 +93,32 @@ python cloudexplorer.py
 <!-- USAGE EXAMPLES -->
 ## Usage
 
+**Keyboard shortcuts**
+
+1) Export menu: CRTL + ![image info](images/x.png) :  it opens the export menu to export.
+
+![image info](images/exportall.png) it opens the export menu to export.
+
+
+
+2) Export a resource to a YAML file, for example a EC2 configuration:
+
+![image info](images/exporte.png) it opens the export menu to export.
+
+
+
+3) Filters:
+
+    - Select in the TUI any resource
+    - CRTL + ![image info](images/f.png) to select a filter or custom filter (if suported). By dafult for example you
+    can filter EC2 instances by its status.
+
+
 **Pipeline Mode**
 
 Find the python called exportall.py to export from command line or in a pipeline the AWS services to a file.
 
-1. To export all ec2 instances to a excel file with all keys:
+1. To export all ec2 instances to an excel file with all keys:
 
  ```shell
 python exportall.py --ec2_all_keys --filename="ec2_all_keys.csv" --format=0
@@ -159,6 +180,13 @@ Please consider supporting it by buying me a tea or a coffee , so I can dedicate
 
 Teadeveloper
 :email: teadeveloper75@gmail.com
+
+
+Images in this readme:
+
+Keys from wikimedia: 
+- https://commons.wikimedia.org/wiki/File:Preferences-desktop-keyboard-shortcuts.svg
+- https://commons.wikimedia.org/wiki/Category:Keyboard_key_icons
 
 
 
