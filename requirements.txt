@@ -1,0 +1,8 @@
+boto3
+npyscreen
+yml
+pyyaml
+pandas
+hurry.filesize
+click
+xlsxwriter
