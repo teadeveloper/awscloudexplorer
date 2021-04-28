@@ -103,7 +103,9 @@ python cloudexplorer.py
 
 2) Export a resource to a YAML file, for example a EC2 configuration:
 
-![image info](images/exporte.png) it opens the export menu to export.
+![image info](images/exporte.png) 
+It creates a file in YML format into the folder you are running the app. 
+The file name is the name_of_the_resource.yml
 
 
 
