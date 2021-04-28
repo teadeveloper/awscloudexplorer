@@ -97,13 +97,15 @@ python cloudexplorer.py
 
 1) Export menu: CRTL + ![image info](images/x.png) :  it opens the export menu to export.
 
-![image info](images/exportall.png) it opens the export menu to export.
+![image info](images/exportall.png)
+
+It opens the export menu to export all the resources to a file.
 
 
 
 2) Export a resource to a YAML file, for example a EC2 configuration:
 
-![image info](images/exporte.png) 
+![image info](images/exporte.png)
 It creates a file in YML format into the folder you are running the app. 
 The file name is the name_of_the_resource.yml
 
