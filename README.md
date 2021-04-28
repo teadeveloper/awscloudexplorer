@@ -93,7 +93,7 @@ python cloudexplorer.py
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-** Pipeline Mode **
+**Pipeline Mode**
 
 Find the python called exportall.py to export from command line or in a pipeline the AWS services to a file.
 
