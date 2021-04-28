@@ -1,0 +1,23 @@
+Policy:
+  Arn: arn:aws:iam::aws:policy/AWSDirectConnectReadOnlyAccess
+  AttachmentCount: 0
+  CreateDate: 2015-02-06 18:40:08+00:00
+  DefaultVersionId: v4
+  Description: Provides read only access to AWS Direct Connect via the AWS Management
+    Console.
+  IsAttachable: true
+  Path: /
+  PermissionsBoundaryUsageCount: 0
+  PolicyId: ANPAI23HZ27SI6FQMGNQ2
+  PolicyName: AWSDirectConnectReadOnlyAccess
+  Tags: []
+  UpdateDate: 2020-05-18 18:48:22+00:00
+ResponseMetadata:
+  HTTPHeaders:
+    content-length: '901'
+    content-type: text/xml
+    date: Wed, 19 May 2021 14:45:39 GMT
+    x-amzn-requestid: d96d3cfa-c95f-466b-8497-7b76880f1e79
+  HTTPStatusCode: 200
+  RequestId: d96d3cfa-c95f-466b-8497-7b76880f1e79
+  RetryAttempts: 0

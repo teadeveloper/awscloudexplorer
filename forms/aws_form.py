@@ -43,7 +43,6 @@ class AwsRegionWidget(npyscreen.MultiLineAction):
 class AwsTableWidget(npyscreen.SimpleGrid):
     pass
 
-
 class AwsServiceWidget(npyscreen.MultiLineAction):
     def actionHighlighted(self, act_on_this, keypress):
         self.parent.parentApp.getForm(
@@ -62,8 +61,10 @@ class BoxAwsTableWidgetBox(npyscreen.BoxTitle):
     _contained_widget = AwsTableWidget
 
 
+
 class BoxAwsServiceWidget(npyscreen.BoxTitle):
     _contained_widget = AwsServiceWidget
+    #additional_y_offset = 0
 
 
 class BoxAwsDetailWidget(npyscreen.BoxTitle):
@@ -76,7 +77,6 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
 
     # General variables
     service_selected = ""
-
     aws_region = configuration["aws_region"]
     aws_end_end_point = configuration["aws_end_end_point"]
 
@@ -133,12 +133,14 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
 
         self.tw_aws_region = self.add(
             BoxAwsRegionWidgetBox,
-            name="Region:",
+            name="Region",
             relx=self.configuration["tw_region_relx"],
             rely=self.configuration["tw_region_rely"],
             width=self.configuration["tw_region_width"],
             height=self.configuration["tw_region_height"],
-            scroll_exit=False,
+            scroll_exit=True,
+            exit_left=True,
+            exit_right=True,
             contained_widget_arguments={
                 # 'color': "WARNING",
                 # 'widgets_inherit_color': True,
@@ -147,11 +149,13 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
 
         self.tw_aws_service = self.add(
             BoxAwsServiceWidget,
-            name="Service:",
+            name="Service",
             relx=self.configuration["tw_service_relx"],
             rely=self.configuration["tw_service_rely"],
             width=self.configuration["tw_service_width"],
-            scroll_exit=False,
+            scroll_exit=True,
+            exit_left=True,
+            exit_right=True,
             contained_widget_arguments={
                 # 'color': "WARNING",
                 # 'widgets_inherit_color': True,
@@ -179,13 +183,13 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
             height=self.configuration["tw_grid_height"],
             width=self.configuration["tw_grid_width"],
             name="Select Service in the left menu",
-            scroll_exit=False,
+            slow_scroll=False,
             contained_widget_arguments={
-                # 'color': "DEFAULT",
-                # 'widgets_inherit_color': True,
-                'select_whole_line': "True",
+                'exit_left' : True,
+                'select_whole_line': True,
+                'additional_x_offset': 0,
                 'column_width': 20,
-                'always_show_cursor': False,
+                'always_show_cursor': True,
             })
 
         self.tw_information = self.add(
@@ -194,11 +198,14 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
             relx=self.configuration["tw_information_relx"],
             rely=self.configuration["tw_information_rely"],
             width=self.configuration["tw_information_width"],
-            scroll_exit=False,
+            scroll_exit=True,
+            exit_left = True,
+            exit_right = True,
             contained_widget_arguments={
-                # 'color': "WARNING",
                 # 'widgets_inherit_color': True,
             })
+
+
 
         # DEFAULT VALUES STARTING THE FORM
 
@@ -208,7 +215,11 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
             {curses.ascii.NL: self.act_on_enter_in_grid_widget})
         self.tw_aws_grid.add_handlers({"^E": self.export_selected_row_grid})
         self.tw_aws_grid.add_handlers({"^F": self.form_custom_filter})
+        self.tw_aws_grid.add_handlers({"^S": self.changefocus})
         self.tw_aws_service.value = 0
+
+    def changefocus(self, info):
+        pass
 
     def act_service_selected_action(self, act_on_this):
 
@@ -550,6 +561,8 @@ class AwsMeanForm(npyscreen.FormBaseNewWithMenus):
         export_form.edit()
 
         return format_to.value[0], file_name_path.value
+
+
 
     def form_custom_filter(self, info):
         """

@@ -10,12 +10,13 @@
 
 ### About The Project & Motivation
 
-Cloud Explorer is a tool for TUI lovers to explore the resources in AWS Cloud using a TUI (terminal user interface) instead a GUI or AWS web console, 
-Inspired in legacy tools like Norton Commander,  who was programming in the 80s or 90s are going to have a TUI experience using the
+Cloud Explorer was created as a proof of concept with the goal of learning AWS Boto and Python.
+
+It is a tool for TUI lovers to explore the resources in AWS Cloud using a TUI (terminal user interface) instead of a GUI or AWS web console, 
+Inspired in legacy tools like Norton Commander,  who were programming in the 80s or 90s are going to have a TUI experience using the
 last technology in cloud.
 
-This the first MVP of Cloud Explorer, a lot of things to be improved, new features etc.. This MVP is stable and you can use in 
-your daily activities as a SysDev os SysAdmin.
+This is the first MVP of Cloud Explorer, numerous things to be improved, new features etc… This MVP is stable, and you can use in your daily activities as a SysDev os Sysadmins, but don't forget it is a Proof of concept.
 
 **Main features:**
 
@@ -97,13 +98,15 @@ python cloudexplorer.py
 
 1) Export menu: CRTL + ![image info](images/x.png) :  it opens the export menu to export.
 
-![image info](images/exportall.png) it opens the export menu to export.
+![image info](images/exportall.png)
+
+It opens the export menu to export all the resources to a file.
 
 
 
 2) Export a resource to a YAML file, for example a EC2 configuration:
 
-![image info](images/exporte.png) 
+![image info](images/exporte.png)
 It creates a file in YML format into the folder you are running the app. 
 The file name is the name_of_the_resource.yml
 
@@ -143,11 +146,14 @@ python exportall.py --policy --filename="policies.csv" --format=4
 <!-- ROADMAP -->
 ## Roadmap
 
-Currently, I am working to improve the Python code to optimize it and also:
+Python and Boto. If I have a new requirement, I will code it.
+
+Things I would have like to add:
 
 * Add pytest/testinfra to automatize tests.
 * Add test to check the app works fine in several Python versions.
 * Support new AWS services.
+
 
 <!-- CONTRIBUTING -->
 ## Contributing
@@ -165,24 +171,17 @@ Contributions are what make the open source community such an amazing place to b
 
 Distributed under Open Source (GPL-3.0)
 
-<h3 align="left">Support:</h3>
-<p><a href="https://www.buymeacoffee.com/teadeveloper"> <img align="left" src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" height="50" width="210" alt="teadeveloper" /></a></p><br><br>
-
-
 ## If you like it & Feedback
 
 Feel free to send me an email with your feedback or open an issue. Feature requests are always welcome.
 
 This personal project is open source (GPL-3.0), and I took me (and take me.) some time and efforts to design, to code, to make some researches and to test it in my personal AWS account. 
 
-Please consider supporting it by buying me a tea or a coffee , so I can dedicate more time on it and add more new features.
-
 <!-- CONTACT -->
 ## Contact
 
 Teadeveloper
 :email: teadeveloper75@gmail.com
-
 
 Images in this readme:
 

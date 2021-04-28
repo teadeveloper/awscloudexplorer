@@ -12,6 +12,9 @@ test.py
 test.sh
 test.sh
 type_filename.ext
+template.py
+
+*.csv
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
