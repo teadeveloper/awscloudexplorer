@@ -76,7 +76,7 @@ tw_information_width: 140
 
 aws_region: "us-east-1"
 #for localstack "http://localhost:4566"
-aws_end_end_point:
+aws_end_end_point: 
 AWS_ACCESS_KEY_ID: "mock_access_key"
 AWS_SECRET_ACCESS_KEY: mock_secret_key"
-AWS_DEFAULT_REGION: us-east-1"
+AWS_DEFAULT_REGION: us-east-1

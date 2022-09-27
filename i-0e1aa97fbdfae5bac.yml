@@ -1,0 +1,99 @@
+- Groups: []
+  Instances:
+  - AmiLaunchIndex: 0
+    Architecture: x86_64
+    BlockDeviceMappings:
+    - DeviceName: /dev/sda1
+      Ebs:
+        AttachTime: 2021-05-19 12:24:05+00:00
+        DeleteOnTermination: true
+        Status: attached
+        VolumeId: vol-03a40b8618886687d
+    CapacityReservationSpecification:
+      CapacityReservationPreference: open
+    ClientToken: FCB96ED1-2584-414B-B26F-2C6867CE1FF2
+    CpuOptions:
+      CoreCount: 1
+      ThreadsPerCore: 1
+    EbsOptimized: false
+    EnaSupport: true
+    EnclaveOptions:
+      Enabled: false
+    HibernationOptions:
+      Configured: false
+    Hypervisor: xen
+    ImageId: ami-04169656fea786776
+    InstanceId: i-0e1aa97fbdfae5bac
+    InstanceType: t2.nano
+    LaunchTime: 2021-05-19 12:24:04+00:00
+    MetadataOptions:
+      HttpEndpoint: enabled
+      HttpPutResponseHopLimit: 1
+      HttpTokens: optional
+      State: applied
+    Monitoring:
+      State: disabled
+    NetworkInterfaces:
+    - Association:
+        IpOwnerId: amazon
+        PublicDnsName: ec2-34-204-91-223.compute-1.amazonaws.com
+        PublicIp: 34.204.91.223
+      Attachment:
+        AttachTime: 2021-05-19 12:24:04+00:00
+        AttachmentId: eni-attach-016df3d010b44e408
+        DeleteOnTermination: true
+        DeviceIndex: 0
+        NetworkCardIndex: 0
+        Status: attached
+      Description: ''
+      Groups:
+      - GroupId: sg-08393c388f7546dc0
+        GroupName: default
+      InterfaceType: interface
+      Ipv6Addresses: []
+      MacAddress: 06:ae:2a:91:9d:f5
+      NetworkInterfaceId: eni-02c7db217c776feb8
+      OwnerId: 055040539746
+      PrivateDnsName: ip-172-31-52-103.ec2.internal
+      PrivateIpAddress: 172.31.52.103
+      PrivateIpAddresses:
+      - Association:
+          IpOwnerId: amazon
+          PublicDnsName: ec2-34-204-91-223.compute-1.amazonaws.com
+          PublicIp: 34.204.91.223
+        Primary: true
+        PrivateDnsName: ip-172-31-52-103.ec2.internal
+        PrivateIpAddress: 172.31.52.103
+      SourceDestCheck: true
+      Status: in-use
+      SubnetId: subnet-0fd159c6359ce0bca
+      VpcId: vpc-0bee4b12f8db3d381
+    Placement:
+      AvailabilityZone: us-east-1e
+      GroupName: ''
+      Tenancy: default
+    PrivateDnsName: ip-172-31-52-103.ec2.internal
+    PrivateIpAddress: 172.31.52.103
+    ProductCodes: []
+    PublicDnsName: ec2-34-204-91-223.compute-1.amazonaws.com
+    PublicIpAddress: 34.204.91.223
+    RootDeviceName: /dev/sda1
+    RootDeviceType: ebs
+    SecurityGroups:
+    - GroupId: sg-08393c388f7546dc0
+      GroupName: default
+    SourceDestCheck: true
+    State:
+      Code: 16
+      Name: running
+    StateTransitionReason: ''
+    SubnetId: subnet-0fd159c6359ce0bca
+    Tags:
+    - Key: Name
+      Value: Cloudexplorer-1
+    - Key: Batch
+      Value: cloudexplorer
+    VirtualizationType: hvm
+    VpcId: vpc-0bee4b12f8db3d381
+  OwnerId: 055040539746
+  ReservationId: r-0bd3e6e08cc65cb85

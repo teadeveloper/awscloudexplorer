@@ -7,7 +7,7 @@ import curses
 
 class App(npyscreen.NPSAppManaged):
 
-    keypress_timeout_default = 1
+    #keypress_timeout_default = 1
 
     def onStart(self):
         self.CloudForm = self.addForm(

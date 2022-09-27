@@ -3,7 +3,6 @@ import yaml
 import pandas as pd
 from hurry.filesize import size
 
-
 class AwsS3:
 
     def __init__(self, aws_end_point, aws_region):
