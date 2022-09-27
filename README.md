@@ -10,8 +10,6 @@
 
 ### About The Project & Motivation
 
-Updated:
-
 Cloud Explorer was created as a proof of concept with the goal of learning AWS Boto and Python.
 
 It is a tool for TUI lovers to explore the resources in AWS Cloud using a TUI (terminal user interface) instead of a GUI or AWS web console, 
